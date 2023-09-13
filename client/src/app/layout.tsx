@@ -22,7 +22,6 @@ export default function RootLayout({
         <head><title></title></head>
         <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-
           {children}
         </ThemeProvider>
         </body>
