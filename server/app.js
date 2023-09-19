@@ -1,14 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
-
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 
+dotenv.config();
 
 const port = process.env.port;
 
-connectDB(); // this is the line that is causing the crash
+connectDB();
 
 const app = express();
 
