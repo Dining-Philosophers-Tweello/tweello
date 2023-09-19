@@ -36,7 +36,7 @@ export default function AuthenticationPage() {
           <Button className="w-full m-2">Sign In</Button>
           <div className="m-2">
             Don't have an account?{" "}
-            <Link href="/" className="text-gray-500 underline">
+            <Link href="/register" className="text-gray-500 underline">
               Sign Up
             </Link>
           </div>
