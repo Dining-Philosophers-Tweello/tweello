@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 
 
-const port = 3000;
+const port = process.env.port;
 
 connectDB(); // this is the line that is causing the crash
 
