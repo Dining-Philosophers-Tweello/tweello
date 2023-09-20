@@ -33,7 +33,14 @@ Install necessary packages and run the backend app
 ```sh
 cd server
 npm i
-npm run dev
+npm run server
+```
+
+Create `.env` inside `server/` folder and fill in contents from Discord
+
+```
+PORT=8000
+MONGO_URI=<GET FROM DISCORD>
 ```
 
 ## Authors
