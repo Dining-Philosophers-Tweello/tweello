@@ -1,14 +1,13 @@
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   DropdownMenu,
@@ -16,6 +15,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -61,9 +68,36 @@ const Navbar = () => {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Workspace Settings</DialogTitle>
-                  <DialogDescription>Update this dialog</DialogDescription>
+                  <DialogDescription className="pt-[20px]">
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Share with" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="diego@gmail.com">
+                          diego@gmail.com
+                        </SelectItem>
+                        <SelectItem value="jordan@gmail.com">
+                          jordan@gmail.com
+                        </SelectItem>
+                        <SelectItem value="daniel@gmail.com">
+                          daniel@gmail.com
+                        </SelectItem>
+                        <SelectItem value="grant@gmail.com">
+                          grant@gmail.com
+                        </SelectItem>
+                        <SelectItem value="sarah@gmail.com">
+                          sarah@gmail.com
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <div>
+                      <p>Delete workspace</p>
+                    </div>
+                  </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
+                  <Button variant="secondary">Cancel</Button>
                   <Button type="submit">Save</Button>
                 </DialogFooter>
               </DialogContent>
