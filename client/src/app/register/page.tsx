@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Register",
