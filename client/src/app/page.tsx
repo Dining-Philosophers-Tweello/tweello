@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -39,6 +41,16 @@ export default function Home() {
           priority
         />
       </div>
+
+      <div className="flex space-x-4">
+        <Button className="w-full p-4">
+          <Link href="/register">Register</Link>
+        </Button>
+        <Button className="w-full p-4">
+          <Link href="/login">Login</Link>
+        </Button>
+      </div>
+
       <ModeToggle />
 
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
