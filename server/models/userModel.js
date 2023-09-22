@@ -1,23 +1,26 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs';
 
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-},{
-    timestamps: true
-});
+  },
+  {
+    timestamps: true,
+  },
+);
 
 // Encrypt password
 userSchema.pre('save', async function(next){

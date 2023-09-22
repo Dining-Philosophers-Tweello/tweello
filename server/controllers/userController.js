@@ -5,7 +5,7 @@ import User from '../models/userModel.js';
 // @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (request, response) => {
-    response.status(200).json({ message: 'User authentication successful' });
+  response.status(200).json({ message: "User authentication successful" });
 });
 
 // @desc    Register a new user
@@ -38,4 +38,4 @@ const registerUser = asyncHandler(async (request, response) => {
        response.status(200).json({message: 'Success'});
 });
 
-export {authUser, registerUser};
+export { authUser, registerUser };
