@@ -13,13 +13,29 @@ const authUser = asyncHandler(async (request, response) => {
 // @access  Public
 const registerUser = asyncHandler(async (request, response) => {
     const {name, email, password} = request.body;
+
     const userExists = await User.findOne({email});
+
     if (userExists) {
         response.status(400);
         throw new Error('This user is already registered');
       }
 
-      const user = await User.create({name, email, password,});
+      const user = await User.create({name, email, password});
+
+      if(user){
+        response.status(201).json({
+          _id: user._id,
+          name: user.name,
+          email: user.email
+        });
+      }
+        else{
+          response.status(400);
+          throw new Error('Invalid request');
+        }     
+        
+       response.status(200).json({message: 'Success'});
 });
 
 export {authUser, registerUser};

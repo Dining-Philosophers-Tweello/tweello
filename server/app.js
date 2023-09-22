@@ -10,16 +10,18 @@ const port = process.env.PORT;
 connectDB();
 const app = express();
 
-app.use('/api/users', userRoutes);
-app.use(notFound);
-app.use(errorHandler);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/users', userRoutes);
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('Server is ready!')
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
