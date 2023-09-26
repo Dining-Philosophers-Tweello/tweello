@@ -16,6 +16,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import DeleteWorkspaceDialog from "./DeleteWorkspaceDialog";
+import ShareWorkspaceDialog from "./ShareWorkspaceDialog";
+
+const emails = [
+  "diego@gmail.com",
+  "jordan@gmail.com",
+  "sarah@gmail.com",
+  "grant@gmail.com",
+  "daniel@gmail.com",
+];
 
 const Navbar = () => {
   return (
@@ -54,20 +64,10 @@ const Navbar = () => {
             </Dialog>
           </li>
           <li>
-            <Dialog>
-              <DialogTrigger>
-                <p className="text-xl">Workspace Settings</p>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Workspace Settings</DialogTitle>
-                  <DialogDescription>Update this dialog</DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button type="submit">Save</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <ShareWorkspaceDialog emails={emails} />
+          </li>
+          <li>
+            <DeleteWorkspaceDialog />
           </li>
         </ul>
 
