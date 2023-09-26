@@ -8,9 +8,6 @@
     "server": "nodemon server/app.js",
     "prepare": "husky install"
   },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  },
   "author": "",
   "license": "ISC",
   "description": "Backend package",
@@ -25,8 +22,6 @@
     "mongoose": "^7.5.1"
   },
   "devDependencies": {
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
     "nodemon": "^3.0.1",
     "prettier": "3.0.3",
     "prettier-plugin-organize-imports": "^3.2.3"
