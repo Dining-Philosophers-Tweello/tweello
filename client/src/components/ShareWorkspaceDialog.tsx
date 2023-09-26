@@ -17,7 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const ShareWorkspaceDialog = () => {
+interface ShareWorkspaceDialogProps {
+  emails: string[];
+}
+
+export const ShareWorkspaceDialog = ({ emails }: ShareWorkspaceDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -33,15 +37,11 @@ export const ShareWorkspaceDialog = () => {
                 <SelectValue placeholder="Select an email" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="diego@gmail.com">diego@gmail.com</SelectItem>
-                <SelectItem value="jordan@gmail.com">
-                  jordan@gmail.com
-                </SelectItem>
-                <SelectItem value="daniel@gmail.com">
-                  daniel@gmail.com
-                </SelectItem>
-                <SelectItem value="grant@gmail.com">grant@gmail.com</SelectItem>
-                <SelectItem value="sarah@gmail.com">sarah@gmail.com</SelectItem>
+                {emails.map((email) => (
+                  <SelectItem key={email} value={email}>
+                    {email}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

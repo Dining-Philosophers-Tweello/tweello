@@ -19,6 +19,14 @@ import Link from "next/link";
 import DeleteWorkspaceDialog from "./DeleteWorkspaceDialog";
 import ShareWorkspaceDialog from "./ShareWorkspaceDialog";
 
+const emails = [
+  "diego@gmail.com",
+  "jordan@gmail.com",
+  "sarah@gmail.com",
+  "grant@gmail.com",
+  "daniel@gmail.com",
+];
+
 const Navbar = () => {
   return (
     <nav className="w-full p-6 border-b border-gray-300">
@@ -56,7 +64,7 @@ const Navbar = () => {
             </Dialog>
           </li>
           <li>
-            <ShareWorkspaceDialog />
+            <ShareWorkspaceDialog emails={emails} />
           </li>
           <li>
             <DeleteWorkspaceDialog />
