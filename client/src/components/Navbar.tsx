@@ -16,8 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import DeleteWorkspaceDialog from "./DeleteWorkspaceDialog";
-import ShareWorkspaceDialog from "./ShareWorkspaceDialog";
+import DeleteWorkspaceDialog from "./delete-workspace-dialog";
+import ShareWorkspaceDialog from "./share-workspace-dialog";
 
 const emails = [
   "diego@gmail.com",
