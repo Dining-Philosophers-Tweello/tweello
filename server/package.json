@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node server/app.js",
-    "server": "nodemon server/app.js",
-    "prepare": "husky install"
+    "server": "nodemon server/app.js"
   },
   "author": "",
   "license": "ISC",
