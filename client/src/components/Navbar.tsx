@@ -15,14 +15,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
+import DeleteWorkspaceDialog from "./DeleteWorkspaceDialog";
+import ShareWorkspaceDialog from "./ShareWorkspaceDialog";
 
 const Navbar = () => {
   return (
@@ -61,47 +56,10 @@ const Navbar = () => {
             </Dialog>
           </li>
           <li>
-            <Dialog>
-              <DialogTrigger>
-                <p className="text-xl">Workspace Settings</p>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Workspace Settings</DialogTitle>
-                  <DialogDescription className="pt-[20px]">
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Share with" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="diego@gmail.com">
-                          diego@gmail.com
-                        </SelectItem>
-                        <SelectItem value="jordan@gmail.com">
-                          jordan@gmail.com
-                        </SelectItem>
-                        <SelectItem value="daniel@gmail.com">
-                          daniel@gmail.com
-                        </SelectItem>
-                        <SelectItem value="grant@gmail.com">
-                          grant@gmail.com
-                        </SelectItem>
-                        <SelectItem value="sarah@gmail.com">
-                          sarah@gmail.com
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <div>
-                      <p>Delete workspace</p>
-                    </div>
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button variant="secondary">Cancel</Button>
-                  <Button type="submit">Save</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <ShareWorkspaceDialog />
+          </li>
+          <li>
+            <DeleteWorkspaceDialog />
           </li>
         </ul>
 
