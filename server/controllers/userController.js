@@ -37,4 +37,22 @@ const registerUser = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
-export { authUser, registerUser };
+// @desc    Delete a user
+// @route   DELETE /api/users/:id
+// @access  Public 
+const deleteUser = asyncHandler(async (req, res) => {
+  // Check if the user exists
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // Delete the user
+  await user.remove();
+
+  res.status(200).json({ message: "User deleted" });
+});
+
+export { authUser, registerUser, deleteUser };
