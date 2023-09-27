@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (request, response) => {
 
 // @desc    Delete a user
 // @route   DELETE /api/users/:id
-// @access  Public 
+// @access  Public
 const deleteUser = asyncHandler(async (req, res) => {
   // Check if the user exists
   const user = await User.findById(req.params.id);
@@ -55,4 +55,4 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "User deleted" });
 });
 
-export { authUser, registerUser, deleteUser };
+export { authUser, deleteUser, registerUser };
