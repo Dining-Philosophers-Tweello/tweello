@@ -42,7 +42,7 @@ const ProfileDialog = () => {
         <DialogHeader>
           <DialogTitle>Delete Profile</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this workspace?
+            Are you sure you want to delete this profile?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="pt-[20px]">
