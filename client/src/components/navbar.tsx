@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import DeleteWorkspaceDialog from "./delete-workspace-dialog";
+import ProfileDialog from "./profile-dialog";
 import ProfileSettingsDialog from "./profile-settings-dialog";
 import ShareWorkspaceDialog from "./share-workspace-dialog";
-import ProfileDialog from "./profile-dialog";
 
 const emails = [
   "diego@gmail.com",
