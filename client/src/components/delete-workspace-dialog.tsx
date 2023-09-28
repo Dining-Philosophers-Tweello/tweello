@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export const DeleteWorkspaceDialog = () => {
+const DeleteWorkspaceDialog = () => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -20,11 +20,11 @@ export const DeleteWorkspaceDialog = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete Workspace</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="pt-[20px]">
             Are you sure you want to delete this workspace?
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex justify-between w-full">
+        <DialogFooter className="flex justify-between w-full pt-[20px]">
           <DialogClose asChild>
             <Button className="w-1/2 mr-2" variant="secondary">
               Cancel

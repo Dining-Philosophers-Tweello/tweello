@@ -21,7 +21,7 @@ interface ShareWorkspaceDialogProps {
   emails: string[];
 }
 
-export const ShareWorkspaceDialog = ({ emails }: ShareWorkspaceDialogProps) => {
+const ShareWorkspaceDialog = ({ emails }: ShareWorkspaceDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger>
