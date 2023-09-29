@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +15,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import DeleteWorkspaceDialog from "./delete-workspace-dialog";
+import ProfileDialog from "./profile-dialog";
+import ProfileSettingsDialog from "./profile-settings-dialog";
+import ShareWorkspaceDialog from "./share-workspace-dialog";
+
+const emails = [
+  "diego@gmail.com",
+  "jordan@gmail.com",
+  "sarah@gmail.com",
+  "grant@gmail.com",
+  "daniel@gmail.com",
+];
 
 const Navbar = () => {
   return (
@@ -54,42 +65,18 @@ const Navbar = () => {
             </Dialog>
           </li>
           <li>
-            <Dialog>
-              <DialogTrigger>
-                <p className="text-xl">Workspace Settings</p>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Workspace Settings</DialogTitle>
-                  <DialogDescription>Update this dialog</DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button type="submit">Save</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <ShareWorkspaceDialog emails={emails} />
+          </li>
+          <li>
+            <DeleteWorkspaceDialog />
           </li>
         </ul>
-
         <ul className="flex space-x-6">
           <li>
-            <Dialog>
-              <DialogTrigger>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Profile</DialogTitle>
-                  <DialogDescription>Update this dialog</DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button type="submit">Log Out</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <ProfileSettingsDialog />
+          </li>
+          <li>
+            <ProfileDialog />
           </li>
         </ul>
       </div>
