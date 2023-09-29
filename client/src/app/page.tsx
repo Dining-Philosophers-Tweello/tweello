@@ -45,7 +45,7 @@ export default function Home() {
     <div className=" mx-auto ">
       <section className="w-full ">
         <div className="">
-          <div className="max-w-8xl h-screen mx-auto flex flex-col md:pl-5  lg:flex-row">
+          <div className="max-w-8xl h-[89vh] mx-auto flex flex-col md:pl-5  lg:flex-row">
             <div
               className="items-left flex flex-col pt-48 text-left lg:w-1/2 lg:flex-grow lg:items-start
                lg:text-left"
