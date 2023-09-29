@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import {ModeToggle} from "@/components/mode-toggle";
 
 const Navbar = () => {
   return (
@@ -90,7 +91,9 @@ const Navbar = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+
           </li>
+          <ModeToggle />
         </ul>
       </div>
     </nav>
