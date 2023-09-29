@@ -47,11 +47,11 @@ export default function Home() {
         <div className="">
           <div className="max-w-8xl h-screen mx-auto flex flex-col md:pl-5  lg:flex-row">
             <div
-              className="items-left flex flex-col pt-28 text-left lg:w-1/2 lg:flex-grow lg:items-start
+              className="items-left flex flex-col pt-48 text-left lg:w-1/2 lg:flex-grow lg:items-start
                lg:text-left"
             >
               <motion.h3
-                className="self-center leading-[.5rem] text-center md:text-left mt-0 mb-12 text-8xl font-bold  md:text-6xl "
+                className="self-center leading-[.5rem] text-center md:text-left mt-0 mb-12 text-9xl font-bold  md:text-6xl "
                 variants={sentence}
                 initial="hidden"
                 animate="visible"
