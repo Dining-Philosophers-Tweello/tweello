@@ -63,11 +63,7 @@ const editUserProfile = asyncHandler(async (request, response) => {
 
   if (user) {
     user.name = request.body.name || user.name;
-    user.email = request.body.email || user.email;
-
-    if (request.body.password) {
-      user.password = request.body.password;
-    }
+    user.password = request.body.password || user.password;
 
     const updatedUser = await user.save();
 
