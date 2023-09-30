@@ -53,29 +53,33 @@ const registerUser = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Public
-//TODO: Work on authMiddleware.js then make private
-const getUserProfile = asyncHandler(async (request, response) => {
-  response.status(200).json({ message: "User profile" });
-
-  /* TODO: Work on authMiddleware.js first
-  const user = {
-    _id: request.user._id,
-    name: request.user.name,
-    email: request.user.email
-  };
-
-  response.status(200).json(user);*/
-});
-
 // @desc    Edit an existing user's information
-// @route   PUT /api/users/profile
+// @route   PUT /api/users/id
 // @access  Public
-//TODO: Work on authMiddleware.js then make private
+//TODO: Make function private once auth middleware is set up
 const editUserProfile = asyncHandler(async (request, response) => {
-  response.status(200).json({ message: "Edit user profile" });
+  //TODO:  Once authentication middleware is set up, change request.params.id below to request.user._id
+  const user = await User.findById(request.params.id);
+
+  if (user) {
+    user.name = request.body.name || user.name;
+    user.email = request.body.email || user.email;
+
+    if (request.body.password) {
+      user.password = request.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    response.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+    });
+  } else {
+    response.status(404);
+    throw new Error("User not found");
+  }
 });
 
-export { authUser, registerUser, getUserProfile, editUserProfile };
+export { authUser, registerUser, editUserProfile };
