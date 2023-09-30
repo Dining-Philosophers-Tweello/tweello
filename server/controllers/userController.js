@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
-import generateToken from '../utils/generateToken.js';
 import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
 
 // @desc    Authenticate (login) a user, set token
 // @route   POST /api/users/auth
@@ -53,4 +53,29 @@ const registerUser = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
-export { authUser, registerUser };
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Public
+//TODO: Work on authMiddleware.js then make private
+const getUserProfile = asyncHandler(async (request, response) => {
+  response.status(200).json({ message: "User profile" });
+
+  /* TODO: Work on authMiddleware.js first
+  const user = {
+    _id: request.user._id,
+    name: request.user.name,
+    email: request.user.email
+  };
+
+  response.status(200).json(user);*/
+});
+
+// @desc    Edit an existing user's information
+// @route   PUT /api/users/profile
+// @access  Public
+//TODO: Work on authMiddleware.js then make private
+const editUserProfile = asyncHandler(async (request, response) => {
+  response.status(200).json({ message: "Edit user profile" });
+});
+
+export { authUser, registerUser, getUserProfile, editUserProfile };
