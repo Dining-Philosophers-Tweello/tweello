@@ -53,6 +53,24 @@ const registerUser = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
+// @desc    Delete a user
+// @route   DELETE /api/users/:id
+// @access  Public
+const deleteUser = asyncHandler(async (req, res) => {
+  // Check if the user exists
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // Delete the user
+  await User.deleteOne({ _id: req.params.id });
+
+  res.status(200).json({ message: "User deleted" });
+});
+
 // @desc    Edit an existing user's information
 // @route   PUT /api/users/id
 // @access  Public
@@ -79,3 +97,5 @@ const editUserProfile = asyncHandler(async (request, response) => {
 });
 
 export { authUser, registerUser, editUserProfile };
+
+export { authUser, deleteUser, registerUser };
