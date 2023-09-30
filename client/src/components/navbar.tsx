@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import {ModeToggle} from "@/components/mode-toggle";
 import DeleteWorkspaceDialog from "./delete-workspace-dialog";
 import ProfileDialog from "./profile-dialog";
 import ProfileSettingsDialog from "./profile-settings-dialog";
@@ -78,6 +79,7 @@ const Navbar = () => {
           <li>
             <ProfileDialog />
           </li>
+          <ModeToggle />
         </ul>
       </div>
     </nav>
