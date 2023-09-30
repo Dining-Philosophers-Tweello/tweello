@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import generateToken from '../utils/generateToken.js';
 import User from "../models/userModel.js";
 
 // @desc    Authenticate (login) a user, set token
@@ -10,6 +11,7 @@ const authUser = asyncHandler(async (request, response) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+    generateToken(response, user._id);
     response.status(201).json({
       _id: user._id,
       name: user.name,
@@ -37,6 +39,7 @@ const registerUser = asyncHandler(async (request, response) => {
   const user = await User.create({ name, email, password });
 
   if (user) {
+    generateToken(response, user._id);
     response.status(200).json({
       _id: user._id,
       name: user.name,
