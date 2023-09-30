@@ -45,7 +45,7 @@ export default function Home() {
     <div className=" mx-auto ">
       <section className="w-full ">
         <div className="">
-          <div className="max-w-8xl h-[89vh] mx-auto flex flex-col md:pl-5  lg:flex-row">
+          <div className="max-w-8xl h-screen mx-auto flex flex-col md:pl-5  lg:flex-row">
             <div
               className="items-left flex flex-col pt-48 text-left lg:w-1/2 lg:flex-grow lg:items-start
                lg:text-left"
@@ -119,7 +119,7 @@ export default function Home() {
               </motion.h3>
             </div>
             <motion.div
-              className="lg:slice hidden md:flex rounded-lg lg:mb-0 sm:h-full lg:max-w-xl"
+              className="lg:slice hidden md:flex rounded-lg lg:mb-0 sm:h-full lg:max-w-5xl"
               variants={imageAnimation}
               initial="hidden"
               animate="visible"
