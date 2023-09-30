@@ -72,7 +72,6 @@ const Navbar = () => {
             <DeleteWorkspaceDialog />
           </li>
         </ul>
-
         <ul className="flex space-x-6">
           <li>
             <ProfileSettingsDialog />
