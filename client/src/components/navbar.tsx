@@ -22,6 +22,7 @@ import ProfileSettingsDialog from "./profile-settings-dialog";
 import ShareWorkspaceDialog from "./share-workspace-dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
+import WorkspaceDialog from "@/components/workspace-dialog";
 
 const emails = [
   "diego@gmail.com",
@@ -42,38 +43,7 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Dialog>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <p className="text-xl">Workspaces</p>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>Workspace 1</DropdownMenuItem>
-                    <DropdownMenuItem>Workspace 2</DropdownMenuItem>
-                    <DropdownMenuItem>Workspace 3</DropdownMenuItem>
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem>Create New Workspace</DropdownMenuItem>
-                    </DialogTrigger>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Workspace</DialogTitle>
-                    <DialogDescription></DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid  items-center gap-4">
-                      <Label htmlFor="name" className="text-centerx text-sm">
-                        Workspace Name
-                      </Label>
-                      <Input id=""  className="col-span-3"/>
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Create</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+              <WorkspaceDialog/>
             </li>
             <li>
               <ShareWorkspaceDialog emails={emails}/>
