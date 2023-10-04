@@ -13,7 +13,7 @@ export default function AuthenticationPage() {
   return (
     <>
       <div className="flex justify-center items-center h-screen">
-        <div className="flex flex-col items-center border border-gray-300 rounded-2xl w-96 h-96 p-5 bg-gray-50">
+        <div className="flex flex-col items-center border border-gray-300 rounded-2xl w-96 h-96 p-5 ">
           <div className="text-3xl p-6">Sign In</div>
           <Input
             className="m-2"

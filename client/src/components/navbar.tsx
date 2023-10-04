@@ -20,6 +20,9 @@ import DeleteWorkspaceDialog from "./delete-workspace-dialog";
 import ProfileDialog from "./profile-dialog";
 import ProfileSettingsDialog from "./profile-settings-dialog";
 import ShareWorkspaceDialog from "./share-workspace-dialog";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import WorkspaceDialog from "@/components/workspace-dialog";
 
 const emails = [
   "diego@gmail.com",
@@ -31,59 +34,37 @@ const emails = [
 
 const Navbar = () => {
   return (
-    <nav className="w-full p-6 border-b border-gray-300">
-      <div className="container mx-auto flex justify-between items-center">
-        <ul className="flex justify-center items-center space-x-8">
-          <li>
-            <Link className="text-2xl font-bold" href="/">
-              Tweello
-            </Link>
-          </li>
-          <li>
-            <Dialog>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <p className="text-xl">Workspaces</p>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Workspace 1</DropdownMenuItem>
-                  <DropdownMenuItem>Workspace 2</DropdownMenuItem>
-                  <DropdownMenuItem>Workspace 3</DropdownMenuItem>
-                  <DialogTrigger asChild>
-                    <DropdownMenuItem>Create New Workspace</DropdownMenuItem>
-                  </DialogTrigger>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Workspace</DialogTitle>
-                  <DialogDescription>Update this dialog</DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button type="submit">Create</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </li>
-          <li>
-            <ShareWorkspaceDialog emails={emails} />
-          </li>
-          <li>
-            <DeleteWorkspaceDialog />
-          </li>
-        </ul>
-        <ul className="flex space-x-6">
-          <li>
-            <ProfileSettingsDialog />
-          </li>
-          <li>
-            <ProfileDialog />
-          </li>
-          <ModeToggle />
-        </ul>
-      </div>
-    </nav>
+      <nav className="w-full p-6 border-b border-gray-300">
+        <div className="container mx-auto flex justify-between items-center">
+          <ul className="flex justify-center items-center space-x-8">
+            <li>
+              <Link className="text-2xl font-bold" href="/">
+                Tweello
+              </Link>
+            </li>
+            <li>
+              <WorkspaceDialog/>
+            </li>
+            <li>
+              <ShareWorkspaceDialog emails={emails}/>
+            </li>
+            <li>
+              <DeleteWorkspaceDialog/>
+            </li>
+          </ul>
+          <ul className="flex space-x-6">
+            <li>
+              <ProfileSettingsDialog/>
+            </li>
+            <li>
+              <ProfileDialog/>
+            </li>
+            <ModeToggle/>
+          </ul>
+        </div>
+      </nav>
   );
+
 };
 
 export default Navbar;
