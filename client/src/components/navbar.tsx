@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,7 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import {ModeToggle} from "@/components/mode-toggle";
 import DeleteWorkspaceDialog from "./delete-workspace-dialog";
 import ProfileDialog from "./profile-dialog";
 import ProfileSettingsDialog from "./profile-settings-dialog";
