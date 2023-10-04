@@ -96,6 +96,4 @@ const editUserProfile = asyncHandler(async (request, response) => {
   }
 });
 
-export { authUser, registerUser, editUserProfile };
-
-export { authUser, deleteUser, registerUser };
+export { authUser, deleteUser, editUserProfile, registerUser };

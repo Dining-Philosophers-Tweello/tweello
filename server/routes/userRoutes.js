@@ -1,8 +1,8 @@
 import express from "express";
 import {
   authUser,
-  editUserProfile,
   deleteUser,
+  editUserProfile,
   registerUser,
 } from "../controllers/userController.js";
 
