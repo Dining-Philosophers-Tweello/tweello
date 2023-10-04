@@ -27,7 +27,7 @@ const authUser = asyncHandler(async (request, response) => {
 // @route   POST /api/users/logout
 // @access  Public
 const logoutUser = asyncHandler(async (request, response) => {
-  response.cookie('jwt', '', {
+  response.cookie("jwt", "", {
     httoPnly: true,
     expires: new Date(0),
   });
