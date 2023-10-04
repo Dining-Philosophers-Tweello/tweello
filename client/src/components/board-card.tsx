@@ -21,7 +21,7 @@ export const BoardCard = ({ title, description, link }: BoardCardProps) => {
 
   return (
     <Link
-      className="flex flex-col bg-sky-100 w-96 h-56 rounded-lg gap-3 p-5 hover:shadow-xl transition-shadow duration-300 justify-between"
+      className="flex flex-col bg-secondary w-96 h-56 rounded-lg gap-3 p-5 hover:shadow-xl transition-shadow duration-300 justify-between"
       href={link}
     >
       <div className="flex flex-col gap-3">
