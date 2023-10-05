@@ -96,4 +96,11 @@ const editUserProfile = asyncHandler(async (request, response) => {
   }
 });
 
-export { authUser, deleteUser, editUserProfile, registerUser };
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+const getUserProfile = asyncHandler(async(request, response) => {
+  response.status(200).json({message: 'User Profile'});
+});
+
+export { authUser, logoutUser, registerUser, deleteUser, editUserProfile, getUserProfile};
