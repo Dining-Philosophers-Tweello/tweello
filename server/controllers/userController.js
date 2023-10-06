@@ -23,6 +23,18 @@ const authUser = asyncHandler(async (request, response) => {
   }
 });
 
+// @desc    Logout user
+// @route   POST /api/users/logout
+// @access  Public
+const logoutUser = asyncHandler(async (request, response) => {
+  response.cookie("jwt", "", {
+    httoPnly: true,
+    expires: new Date(0),
+  });
+
+  response.status(200).json({ message: "User logged out" });
+});
+
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
