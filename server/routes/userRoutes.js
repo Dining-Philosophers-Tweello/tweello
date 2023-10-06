@@ -7,7 +7,7 @@ import {
   logoutUser,
   registerUser,
 } from "../controllers/userController.js";
-//import { protect } from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -15,8 +15,7 @@ router.post("/", registerUser);
 router.post("/auth", authUser);
 router.post("/logout", logoutUser);
 router.route("/:id").delete(deleteUser);
-//router.route("/profile").get(protect, getUserProfile).put(getUserProfile)
-router.route("/profile").get(getUserProfile);
-router.route("/:id").put(editUserProfile);
+router.route("/profile").get(protect, getUserProfile);
+router.route("/:id").put(protect, editUserProfile);
 
 export default router;
