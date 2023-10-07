@@ -4,6 +4,7 @@ import express from "express";
 import connectDB from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
+import workspaceRoutes from "./routes/workspaceRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
+app.use("/api/workspace", workspaceRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is ready!");
