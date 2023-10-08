@@ -3,7 +3,7 @@ import Workspace from "../models/workspaceModel.js";
 import generateToken from "../utils/generateToken.js";
 
 // @desc    Create a new workspace
-// @route   POST /api/workspace
+// @route   POST /api/workspaces
 // @access  Public
 const createWorkspace = asyncHandler(async (request, response) => {
   const { name, boards, members, creator } = request.body;
