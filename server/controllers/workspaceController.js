@@ -5,7 +5,7 @@ import Workspace from "../models/workspaceModel.js";
 // @route   POST /api/workspaces
 // @access  Public
 const createWorkspace = asyncHandler(async (request, response) => {
-  const { name, boards, members, creator } = request.body;
+  const { name, creator } = request.body;
 
   const workspaceExists = await Workspace.findOne({ name });
 
@@ -14,14 +14,12 @@ const createWorkspace = asyncHandler(async (request, response) => {
     throw new Error("You already have a workspace with this name");
   }
 
-  const workspace = await Workspace.create({ name, boards, members, creator });
+  const workspace = await Workspace.create({ name, creator });
 
   if (workspace) {
     response.status(200).json({
       _id: workspace._id,
       name: workspace.name,
-      boards: workspace.boards,
-      members: workspace.members,
       creator: workspace.creator,
     });
   } else {
