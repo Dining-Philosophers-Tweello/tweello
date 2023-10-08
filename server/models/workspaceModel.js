@@ -26,7 +26,7 @@ const workspaceSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const Workspace = mongoose.model("Workspace", workspaceSchema);
