@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import Workspace from "../models/workspaceModel.js";
-import generateToken from "../utils/generateToken.js";
 
 // @desc    Create a new workspace
 // @route   POST /api/workspaces
@@ -18,7 +17,6 @@ const createWorkspace = asyncHandler(async (request, response) => {
   const workspace = await Workspace.create({ name, boards, members, creator });
 
   if (workspace) {
-    generateToken(response, workspace._id);
     response.status(200).json({
       _id: workspace._id,
       name: workspace.name,
