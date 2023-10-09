@@ -67,7 +67,7 @@ const registerUser = asyncHandler(async (request, response) => {
 
 // @desc    Delete a user
 // @route   DELETE /api/users/profile
-// @access  Public
+// @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
   // Check if the user exists
   const user = await User.findById(req.user._id);
@@ -85,10 +85,8 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 // @desc    Edit an existing user's information
 // @route   PUT /api/users/profile
-// @access  Public
-//TODO: Make function private once auth middleware is set up
+// @access  Private
 const editUserProfile = asyncHandler(async (request, response) => {
-  //TODO:  Once authentication middleware is set up, change request.params.id below to request.user._id
   const user = await User.findById(request.user._id);
 
   if (user) {
@@ -112,8 +110,20 @@ const editUserProfile = asyncHandler(async (request, response) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (request, response) => {
-  response.status(200).json({ message: "User Profile" });
-});
+  //response.status(200).json({ message: "User Profile" });
+    const user = await User.findById(request.user._id);
+  
+    if (user) {
+      response.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+    } else {
+      response.status(404);
+      throw new Error('User not found');
+    }
+  });
 
 export {
   authUser,

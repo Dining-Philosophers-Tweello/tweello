@@ -16,8 +16,8 @@ router.post("/auth", authUser);
 router.post("/logout", logoutUser);
 router
   .route("/profile")
-  .get(getUserProfile)
-  .put(editUserProfile)
-  .delete(deleteUser);
+  .get(protect, getUserProfile)
+  .put(protect, editUserProfile)
+  .delete(protect, deleteUser);
 
 export default router;
