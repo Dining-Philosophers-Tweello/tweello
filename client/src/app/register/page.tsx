@@ -20,7 +20,7 @@ export default function Register() {
     password: string;
     confirmPassword: string;
   }
-  const apiUrl = process.env.URL + "/api/users" || "http://localhost:8000/api/users";
+  const apiUrl =  "http://localhost:8000/api/users";
 
   const validationSchema = object({
     name: string().min(2, 'Name must be at least 2 characters').required('Name is a required field.'),
