@@ -69,7 +69,6 @@ const registerUser = asyncHandler(async (request, response) => {
 // @route   DELETE /api/users/profile
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
-  // Check if the user exists
   const user = await User.findById(req.user._id);
 
   if (!user) {
@@ -77,7 +76,6 @@ const deleteUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  // Delete the user
   await User.deleteOne({ _id: req.user._id });
 
   res.status(200).json({ message: "User deleted" });
@@ -110,20 +108,19 @@ const editUserProfile = asyncHandler(async (request, response) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (request, response) => {
-  //response.status(200).json({ message: "User Profile" });
-    const user = await User.findById(request.user._id);
-  
-    if (user) {
-      response.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      });
-    } else {
-      response.status(404);
-      throw new Error('User not found');
-    }
-  });
+  const user = await User.findById(request.user._id);
+
+  if (user) {
+    response.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    response.status(404);
+    throw new Error("User not found");
+  }
+});
 
 export {
   authUser,
@@ -133,4 +130,3 @@ export {
   logoutUser,
   registerUser,
 };
-
