@@ -1,11 +1,13 @@
 import asyncHandler from "express-async-handler";
 import Workspace from "../models/workspaceModel.js";
+import User from "../models/userModel.js";
 
 // @desc    Create a new workspace
 // @route   POST /api/workspaces
 // @access  Public
 const createWorkspace = asyncHandler(async (request, response) => {
-  const { name, creator } = request.body;
+  const { name } = request.body;
+  const creator = request.user._id;
 
   const workspaceExists = await Workspace.findOne({ name });
 

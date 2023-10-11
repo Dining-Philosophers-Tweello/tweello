@@ -1,8 +1,9 @@
 import express from "express";
 import { createWorkspace } from "../controllers/workspaceController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createWorkspace);
+router.route("/").post(protect, createWorkspace);
 
 export default router;
