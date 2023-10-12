@@ -1,10 +1,9 @@
 import asyncHandler from "express-async-handler";
 import Workspace from "../models/workspaceModel.js";
-import User from "../models/userModel.js";
 
 // @desc    Create a new workspace
 // @route   POST /api/workspaces
-// @access  Public
+// @access  Private
 const createWorkspace = asyncHandler(async (request, response) => {
   const { name } = request.body;
   const creator = request.user._id;
@@ -32,4 +31,28 @@ const createWorkspace = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
-export { createWorkspace };
+// @desc    Delete a workspace
+// @route   DELETE /api/workspaces/:id
+// @access  Private
+const deleteWorkspace = asyncHandler(async (request, response) => {
+  const id = request.params.id;
+  const user = request.user._id;
+
+  const workspace = await Workspace.findById(id);
+
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  if (workspace.creator.toString() !== user.toString()) {
+    response.status(401);
+    throw new Error("Only the creator can delete this workspace");
+  }
+
+  await Workspace.deleteOne({ _id: id });
+
+  response.status(200).json({ message: "Workspace deleted" });
+});
+
+export { createWorkspace, deleteWorkspace };
