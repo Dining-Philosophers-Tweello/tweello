@@ -66,7 +66,7 @@ const shareWorkspace = asyncHandler(async (request, response) => {
   const workspace = await Workspace.findById(workspaceId);
 
   if (workspace) {
-    if (currentUserId === workspace.creator) {
+    if (currentUserId.toString() === workspace.creator.toString()) {
       workspace.members.push(userId);
 
       const updatedWorkspace = await workspace.save();
