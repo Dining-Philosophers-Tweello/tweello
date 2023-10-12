@@ -55,4 +55,35 @@ const deleteWorkspace = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Workspace deleted" });
 });
 
-export { createWorkspace, deleteWorkspace };
+// @desc    Share a workspace
+// @route   PUT /api/workspaces/:id
+// @access  Private
+const shareWorkspace = asyncHandler(async (request, response) => {
+  const workspaceId = request.params.id;
+  const { userId } = request.body;
+  const currentUserId = request.user._id;
+
+  const workspace = await Workspace.findById(workspaceId);
+
+  if (workspace) {
+    if (currentUserId === workspace.creator) {
+      workspace.members.push(userId);
+
+      const updatedWorkspace = await workspace.save();
+
+      response.status(200).json({
+        _id: updatedWorkspace._id,
+        name: updatedWorkspace.name,
+        members: updatedWorkspace.members,
+      });
+    } else {
+      response.status(401);
+      throw new Error("Invalid credentials to share this workspace");
+    }
+  } else {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+});
+
+export { createWorkspace, deleteWorkspace, shareWorkspace };
