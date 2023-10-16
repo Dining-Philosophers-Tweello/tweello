@@ -31,6 +31,30 @@ const createWorkspace = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Success" });
 });
 
+// @desc    Edit an existing workspace's information
+// @route   PUT /api/workspaces/:id
+// @access  Private
+const editWorkspace = asyncHandler(async (request, response) => {
+  const workspace = await Workspace.findById(request.params.id);
+
+  if (workspace) {
+    workspace.name = request.body.name || workspace.name;
+
+    const updatedWorkspace = await workspace.save();
+
+    response.status(200).json({
+      _id: updatedWorkspace._id,
+      name: updatedWorkspace.name,
+      boards: updatedWorkspace.boards,
+      members: updatedWorkspace.members,
+      creator: updatedWorkspace.creator,
+    });
+  } else {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+});
+
 // @desc    Delete a workspace
 // @route   DELETE /api/workspaces/:id
 // @access  Private
@@ -86,4 +110,4 @@ const shareWorkspace = asyncHandler(async (request, response) => {
   }
 });
 
-export { createWorkspace, deleteWorkspace, shareWorkspace };
+export { createWorkspace, editWorkspace, deleteWorkspace, shareWorkspace };
