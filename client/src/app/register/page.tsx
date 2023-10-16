@@ -50,7 +50,7 @@ export default function Register() {
         },
       });
       const data = await response.json();
-      console.log(data);
+      console.log("Response:", data);
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -63,22 +63,7 @@ export default function Register() {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: FormValues) => {
-      try {
-        console.log(JSON.stringify(values));
-        const response = await fetch(`${apiUrl}`, {
-          method: "POST",
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
-    },
+    onSubmit: handleSubmit,
   });
   return (
     <>
@@ -193,7 +178,10 @@ export default function Register() {
                       </div>
                     ) : null}
                   </div>
-                  <Button className="w-full  hover:bg-foreground m-2">
+                  <Button
+                    type="submit"
+                    className="w-full  hover:bg-foreground m-2"
+                  >
                     Register
                   </Button>
                 </form>
