@@ -1,19 +1,52 @@
 import asyncHandler from "express-async-handler";
 import Workspace from "../models/workspaceModel.js";
 
+// @desc    Get a user's workspaces
+// @route   GET /api/workspaces
+// @access  Private
+const getWorkspaces = asyncHandler(async (request, response) => {
+  const currentUserId = request.user._id;
+  const workspaces = await Workspace.find({
+    $or: [{ members: currentUserId }, { creator: currentUserId }],
+  }).exec();
+
+  response.status(200).json({
+    workspaces: workspaces,
+  });
+});
+
+// @desc    Get a workspace
+// @route   GET /api/workspaces/:id
+// @access  Private
+const getWorkspace = asyncHandler(async (request, response) => {
+  const workspace = await Workspace.findById(request.params.id);
+  const currentUserId = request.user._id;
+
+  if (workspace) {
+    if (currentUserId.toString() === workspace.creator.toString()) {
+      response.status(200).json({
+        _id: workspace._id,
+        name: workspace.name,
+        boards: workspace.boards,
+        members: workspace.members,
+        creator: workspace.creator,
+      });
+    } else {
+      response.status(401);
+      throw new Error("Invalid credentials to get this workspace");
+    }
+  } else {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+});
+
 // @desc    Create a new workspace
 // @route   POST /api/workspaces
 // @access  Private
 const createWorkspace = asyncHandler(async (request, response) => {
   const { name } = request.body;
   const creator = request.user._id;
-
-  const workspaceExists = await Workspace.findOne({ name });
-
-  if (workspaceExists) {
-    response.status(400);
-    throw new Error("You already have a workspace with this name");
-  }
 
   const workspace = await Workspace.create({ name, creator });
 
@@ -36,19 +69,34 @@ const createWorkspace = asyncHandler(async (request, response) => {
 // @access  Private
 const editWorkspace = asyncHandler(async (request, response) => {
   const workspace = await Workspace.findById(request.params.id);
+  const currentUserId = request.user._id;
+  const { name, boardId, memberId } = request.body;
 
   if (workspace) {
-    workspace.name = request.body.name || workspace.name;
+    if (currentUserId.toString() === workspace.creator.toString()) {
+      workspace.name = name || workspace.name;
 
-    const updatedWorkspace = await workspace.save();
+      if (boardId) {
+        workspace.boards.push(boardId);
+      }
 
-    response.status(200).json({
-      _id: updatedWorkspace._id,
-      name: updatedWorkspace.name,
-      boards: updatedWorkspace.boards,
-      members: updatedWorkspace.members,
-      creator: updatedWorkspace.creator,
-    });
+      if (memberId) {
+        workspace.members.push(memberId);
+      }
+
+      const updatedWorkspace = await workspace.save();
+
+      response.status(200).json({
+        _id: updatedWorkspace._id,
+        name: updatedWorkspace.name,
+        boards: updatedWorkspace.boards,
+        members: updatedWorkspace.members,
+        creator: updatedWorkspace.creator,
+      });
+    } else {
+      response.status(401);
+      throw new Error("Invalid credentials to edit this workspace");
+    }
   } else {
     response.status(404);
     throw new Error("Workspace not found");
@@ -79,35 +127,10 @@ const deleteWorkspace = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Workspace deleted" });
 });
 
-// @desc    Share a workspace
-// @route   PUT /api/workspaces/:id
-// @access  Private
-const shareWorkspace = asyncHandler(async (request, response) => {
-  const workspaceId = request.params.id;
-  const { userId } = request.body;
-  const currentUserId = request.user._id;
-
-  const workspace = await Workspace.findById(workspaceId);
-
-  if (workspace) {
-    if (currentUserId.toString() === workspace.creator.toString()) {
-      workspace.members.push(userId);
-
-      const updatedWorkspace = await workspace.save();
-
-      response.status(200).json({
-        _id: updatedWorkspace._id,
-        name: updatedWorkspace.name,
-        members: updatedWorkspace.members,
-      });
-    } else {
-      response.status(401);
-      throw new Error("Invalid credentials to share this workspace");
-    }
-  } else {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
-});
-
-export { createWorkspace, editWorkspace, deleteWorkspace, shareWorkspace };
+export {
+  createWorkspace,
+  deleteWorkspace,
+  editWorkspace,
+  getWorkspace,
+  getWorkspaces,
+};
