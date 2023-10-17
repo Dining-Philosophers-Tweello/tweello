@@ -15,7 +15,6 @@ export default function Register() {
     password: string;
     confirmPassword: string;
   };
-  const apiUrl = "http://localhost:8000/api/users";
 
   const validationSchema = object({
     name: string()
@@ -41,14 +40,16 @@ export default function Register() {
   });
   const handleSubmit = async (values: FormValues) => {
     try {
-      console.log(JSON.stringify(values));
-      const response = await fetch(`${apiUrl}`, {
+      const response = await fetch("http://localhost:8000/api/users", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
       });
+      if (response.ok) {
+        alert("Account created successfully!");
+      }
       const data = await response.json();
       console.log("Response:", data);
     } catch (error) {
