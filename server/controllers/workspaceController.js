@@ -22,23 +22,38 @@ const getWorkspace = asyncHandler(async (request, response) => {
   const workspace = await Workspace.findById(request.params.id);
   const currentUserId = request.user._id;
 
-  if (workspace) {
-    if (currentUserId.toString() === workspace.creator.toString()) {
-      response.status(200).json({
-        _id: workspace._id,
-        name: workspace.name,
-        boards: workspace.boards,
-        members: workspace.members,
-        creator: workspace.creator,
-      });
-    } else {
-      response.status(401);
-      throw new Error("Invalid credentials to get this workspace");
-    }
-  } else {
+  if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
   }
+
+  const isValidUser = await Workspace.findOne({
+    _id: workspace._id,
+    $or: [{ creator: currentUserId }, { members: { $in: [currentUserId] } }],
+  })
+    .then((workspace) => {
+      if (workspace) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch(() => {
+      return false;
+    });
+
+  if (!isValidUser) {
+    response.status(401);
+    throw new Error("You do not have permission to get this workspace");
+  }
+
+  response.status(200).json({
+    _id: workspace._id,
+    name: workspace.name,
+    boards: workspace.boards,
+    members: workspace.members,
+    creator: workspace.creator,
+  });
 });
 
 // @desc    Create a new workspace
@@ -47,6 +62,13 @@ const getWorkspace = asyncHandler(async (request, response) => {
 const createWorkspace = asyncHandler(async (request, response) => {
   const { name } = request.body;
   const creator = request.user._id;
+
+  const workspaceExists = await Workspace.findOne({ name });
+
+  if (workspaceExists) {
+    response.status(400);
+    throw new Error("Workspace with this name already exists");
+  }
 
   const workspace = await Workspace.create({ name, creator });
 
@@ -70,37 +92,32 @@ const createWorkspace = asyncHandler(async (request, response) => {
 const editWorkspace = asyncHandler(async (request, response) => {
   const workspace = await Workspace.findById(request.params.id);
   const currentUserId = request.user._id;
-  const { name, boardId, memberId } = request.body;
+  const { name, memberId } = request.body;
 
-  if (workspace) {
-    if (currentUserId.toString() === workspace.creator.toString()) {
-      workspace.name = name || workspace.name;
-
-      if (boardId) {
-        workspace.boards.push(boardId);
-      }
-
-      if (memberId) {
-        workspace.members.push(memberId);
-      }
-
-      const updatedWorkspace = await workspace.save();
-
-      response.status(200).json({
-        _id: updatedWorkspace._id,
-        name: updatedWorkspace.name,
-        boards: updatedWorkspace.boards,
-        members: updatedWorkspace.members,
-        creator: updatedWorkspace.creator,
-      });
-    } else {
-      response.status(401);
-      throw new Error("Invalid credentials to edit this workspace");
-    }
-  } else {
+  if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
   }
+
+  if (currentUserId.toString() !== workspace.creator.toString()) {
+    response.status(401);
+    throw new Error("Only the creator can edit this workspace");
+  }
+
+  workspace.name = name || workspace.name;
+
+  if (memberId) {
+    workspace.members.push(memberId);
+  }
+
+  const updatedWorkspace = await workspace.save();
+
+  response.status(200).json({
+    _id: updatedWorkspace._id,
+    name: updatedWorkspace.name,
+    members: updatedWorkspace.members,
+    creator: updatedWorkspace.creator,
+  });
 });
 
 // @desc    Delete a workspace
