@@ -4,12 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Formik, useFormik } from "formik";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { object, ref, string } from "yup";
 
 export default function Register() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    // Check if the user is authenticated. If so, redirect to the home page.
+    if (status === "authenticated") {
+      router.replace("/home");
+    }
+  }, [status, router]);
+  const [error, setError] = useState(null);
+
   type FormValues = {
     name: string;
     email: string;
