@@ -1,17 +1,14 @@
 import mongoose from "mongoose";
 
+const boardSchema = new mongoose.Schema({});
+
 const workspaceSchema = mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    boards: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Board",
-      },
-    ],
+    boards: [boardSchema],
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
