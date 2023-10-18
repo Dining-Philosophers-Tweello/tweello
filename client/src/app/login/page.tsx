@@ -5,33 +5,54 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Formik, useFormik } from "formik";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { object, string } from "yup";
 
 export default function AuthenticationPage() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    // Check if the user is authenticated. If so, redirect to the home page.
+    if (status === "authenticated") {
+      router.replace("/home");
+    }
+  }, [status, router]);
   const [error, setError] = useState(null);
-  // const router = useRouter();
-  const handleSubmit = async (values: FormValues) => {
-    signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      callbackUrl: "/home",
-    }).then((response) => {
-      if (response?.error) {
-        setError("Response:" + response.error);
-      } else {
-        setError(null);
-      }
-    });
+  type FormValues = {
+    email: string;
+    password: string;
   };
+
+  const handleSubmit = async (values: FormValues) => {
+    try {
+      const { email, password } = values;
+      const res = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: "/home",
+      });
+
+      if (res.error) {
+        setError(res.error);
+        alert(res.error);
+      } else if (res.ok) {
+        // Handle successful authentication here
+        setError(res.error);
+        alert("Logged in successfully!");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+
+    // Handle other cases if needed
+  };
+
   const validationSchema = object({
-    name: string()
-      .min(2, "Name must be at least 2 characters")
-      .required("Name is a required field."),
-    // line
     email: string()
       .email("Email must be a valid email.")
       .required("Email is a required field."),
@@ -46,16 +67,14 @@ export default function AuthenticationPage() {
         "Minimum 6 characters, at least one number, and special character.",
       ),
   });
-  type FormValues = {
-    email: string;
-    password: string;
-  };
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validateOnBlur: true,
+    validationSchema: validationSchema,
     onSubmit: handleSubmit,
   });
   return (
@@ -73,7 +92,11 @@ export default function AuthenticationPage() {
             onSubmit={handleSubmit}
           >
             {(formik) => (
-              <form method="POST" className="w-80 grid gap-y-4 transition-all">
+              <form
+                method="POST"
+                className="w-80 grid gap-y-4 transition-all"
+                onSubmit={formik.handleSubmit}
+              >
                 <div className="grid gap-2">
                   <Label>Email</Label>
                   <Input

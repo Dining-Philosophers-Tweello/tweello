@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import comicMusk from "../../public/images/comicMusk.jpg";
@@ -35,12 +36,17 @@ const letter = {
 const line = "Welcome to ";
 const line2 = "Tweello";
 const line3 = "A website dedicated to tasks.";
-const buttonData = [
-  { text: "Register", link: "/register" },
-  { text: "Login", link: "/login" },
-];
 
 export default function Home() {
+  const { status } = useSession();
+
+  const buttonData =
+    status === "unauthenticated"
+      ? [
+          { text: "Register", link: "/register" },
+          { text: "Login", link: "/login" },
+        ]
+      : [{ text: "Home", link: "/home" }];
   return (
     <div className=" mx-auto ">
       <section className="w-full ">

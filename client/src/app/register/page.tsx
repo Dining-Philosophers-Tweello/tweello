@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Formik, useFormik } from "formik";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { object, ref, string } from "yup";
@@ -49,11 +50,14 @@ export default function Register() {
       });
       if (response.ok) {
         alert("Account created successfully!");
+        await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          callbackUrl: "/home",
+        });
       }
-      const data = await response.json();
-      console.log("Response:", data);
     } catch (error) {
-      console.error("Error: ", error);
+      alert(error);
     }
   };
   const formik = useFormik({

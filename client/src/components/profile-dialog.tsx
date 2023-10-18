@@ -1,3 +1,4 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,8 +17,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut, useSession } from "next-auth/react";
 
 const ProfileDialog = () => {
+  const { status } = useSession();
+
+  const handleSignout = async () => {
+    await signOut(); // Sign out the user
+  };
   return (
     <Dialog>
       <DropdownMenu>
@@ -33,7 +40,13 @@ const ProfileDialog = () => {
           <DialogTrigger asChild>
             <DropdownMenuItem>Delete Profile</DropdownMenuItem>
           </DialogTrigger>
-          <DropdownMenuItem>Sign Out</DropdownMenuItem>
+          <DropdownMenuItem>
+            {status === "authenticated" && (
+              <DropdownMenuItem onClick={handleSignout}>
+                Sign Out
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>
