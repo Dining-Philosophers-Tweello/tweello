@@ -16,8 +16,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
 
 const ProfileDialog = () => {
+  const handleSignout = async () => {
+    await signOut({ callbackUrl: "/" }); // Sign out the user
+  };
   return (
     <Dialog>
       <DropdownMenu>
@@ -33,7 +37,11 @@ const ProfileDialog = () => {
           <DialogTrigger asChild>
             <DropdownMenuItem>Delete Profile</DropdownMenuItem>
           </DialogTrigger>
-          <DropdownMenuItem>Sign Out</DropdownMenuItem>
+          <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignout}>
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>

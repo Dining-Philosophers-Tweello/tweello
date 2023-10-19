@@ -4,18 +4,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Formik, useFormik } from "formik";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { object, ref, string } from "yup";
 
 export default function Register() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    // Check if the user is authenticated. If so, redirect to the home page.
+    if (status === "authenticated") {
+      router.replace("/home");
+    }
+  }, [status, router]);
+  const [error, setError] = useState(null);
+
   type FormValues = {
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
   };
-  const apiUrl = "http://localhost:8000/api/users";
 
   const validationSchema = object({
     name: string()
@@ -41,18 +53,22 @@ export default function Register() {
   });
   const handleSubmit = async (values: FormValues) => {
     try {
-      console.log(JSON.stringify(values));
-      const response = await fetch(`${apiUrl}`, {
+      const response = await fetch("http://localhost:8000/api/users", {
         method: "POST",
         body: JSON.stringify(values),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await response.json();
-      console.log(data);
+      if (response.ok) {
+        await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          callbackUrl: "/home",
+        });
+      }
     } catch (error) {
-      console.error("Error: ", error);
+      console.error(error);
     }
   };
   const formik = useFormik({
@@ -63,22 +79,7 @@ export default function Register() {
       confirmPassword: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values: FormValues) => {
-      try {
-        console.log(JSON.stringify(values));
-        const response = await fetch(`${apiUrl}`, {
-          method: "POST",
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
-    },
+    onSubmit: handleSubmit,
   });
   return (
     <>
@@ -193,7 +194,10 @@ export default function Register() {
                       </div>
                     ) : null}
                   </div>
-                  <Button className="w-full  hover:bg-foreground m-2">
+                  <Button
+                    type="submit"
+                    className="w-full  hover:bg-foreground m-2"
+                  >
                     Register
                   </Button>
                 </form>
