@@ -61,7 +61,6 @@ export default function Register() {
         },
       });
       if (response.ok) {
-        alert("Account created successfully!");
         await signIn("credentials", {
           email: values.email,
           password: values.password,
@@ -69,7 +68,7 @@ export default function Register() {
         });
       }
     } catch (error) {
-      alert(error);
+      console.error(error);
     }
   };
   const formik = useFormik({

@@ -39,11 +39,9 @@ export default function AuthenticationPage() {
 
       if (res.error) {
         setError(res.error);
-        alert(res.error);
       } else if (res.ok) {
         // Handle successful authentication here
         setError(res.error);
-        alert("Logged in successfully!");
       }
     } catch (error) {
       console.error("Error: ", error);
