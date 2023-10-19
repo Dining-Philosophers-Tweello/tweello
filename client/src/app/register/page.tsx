@@ -14,7 +14,6 @@ import { object, ref, string } from "yup";
 export default function Register() {
   const router = useRouter();
   const { data: session, status } = useSession();
-
   useEffect(() => {
     // Check if the user is authenticated. If so, redirect to the home page.
     if (status === "authenticated") {

@@ -1,4 +1,3 @@
-"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +20,7 @@ import { signOut } from "next-auth/react";
 
 const ProfileDialog = () => {
   const handleSignout = async () => {
-    await signOut(); // Sign out the user
+    await signOut({ callbackUrl: "/" }); // Sign out the user
   };
   return (
     <Dialog>

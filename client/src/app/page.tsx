@@ -39,7 +39,6 @@ const line3 = "A website dedicated to tasks.";
 
 export default function Home() {
   const { status } = useSession();
-
   const buttonData =
     status === "unauthenticated"
       ? [
