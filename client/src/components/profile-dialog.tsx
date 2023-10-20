@@ -20,8 +20,10 @@ import { signOut } from "next-auth/react";
 
 const ProfileDialog = () => {
   const handleSignout = async () => {
+    localStorage.removeItem('jwt');
     await signOut({ callbackUrl: "/" }); // Sign out the user
   };
+  
   return (
     <Dialog>
       <DropdownMenu>

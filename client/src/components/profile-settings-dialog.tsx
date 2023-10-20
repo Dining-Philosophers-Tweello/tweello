@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Settings } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -33,6 +34,7 @@ const formSchema = z.object({
 });
 
 const ProfileSettingsDialog = () => {
+  const [profile, setProfile] = useState(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,6 +44,34 @@ const ProfileSettingsDialog = () => {
       confirmNewPassword: "",
     },
   });
+
+  useEffect(() => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/api/users/profile";
+    const jwt = localStorage.getItem("jwt");
+
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setProfile(data);
+        console.log("Response data:", data);
+      })
+      .catch((error) => {
+        console.error("Error fetching profile:", error);
+      });
+  }, []);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
