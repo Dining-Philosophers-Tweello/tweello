@@ -11,11 +11,9 @@ const authUser = asyncHandler(async (request, response) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(response, user._id);
+    const token = generateToken(response, user._id);
     response.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
+      token: token,
     });
   } else {
     response.status(401);
@@ -51,11 +49,9 @@ const registerUser = asyncHandler(async (request, response) => {
   const user = await User.create({ name, email, password });
 
   if (user) {
-    generateToken(response, user._id);
+    const token = generateToken(response, user._id);
     response.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
+      token: token,
     });
   } else {
     response.status(400);
