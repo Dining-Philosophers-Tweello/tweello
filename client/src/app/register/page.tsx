@@ -106,7 +106,7 @@ export default function Register() {
                   onSubmit={formik.handleSubmit}
                 >
                   <div className="grid gap-2">
-                    <Label>First Name</Label>
+                    <Label>Name</Label>
                     <Input
                       id="name"
                       name="name"
