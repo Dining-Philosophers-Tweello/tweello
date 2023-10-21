@@ -21,15 +21,36 @@ import { signOut } from "next-auth/react";
 const ProfileDialog = () => {
   const handleSignout = async () => {
     localStorage.removeItem('jwt');
-    await signOut({ callbackUrl: "/" }); // Sign out the user
+    await signOut({ callbackUrl: "/" });
   };
+
+  const handleSubmit = async () => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/api/users/profile", requestOptions);
+
+      if (response.ok) {
+        await handleSignout();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
   
   return (
     <Dialog>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" />
             <AvatarFallback>
               <AvatarImage src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" />
             </AvatarFallback>
@@ -60,7 +81,7 @@ const ProfileDialog = () => {
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button className="w-1/2 mr-2" type="submit">
+            <Button className="w-1/2 mr-2" type="submit" onClick={handleSubmit}>
               Delete
             </Button>
           </DialogClose>
