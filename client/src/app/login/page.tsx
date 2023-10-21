@@ -63,14 +63,6 @@ export default function AuthenticationPage() {
       .required("Email is a required field."),
     password: string()
       .required("Required")
-      .min(
-        6,
-        "Minimum 6 characters, at least one number, and special character.",
-      )
-      .matches(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
-        "Minimum 6 characters, at least one number, and special character.",
-      ),
   });
 
   const formik = useFormik({
