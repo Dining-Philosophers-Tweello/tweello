@@ -16,10 +16,10 @@ const getWorkspaces = asyncHandler(async (request, response) => {
 });
 
 // @desc    Get a workspace
-// @route   GET /api/workspaces/:id
+// @route   GET /api/workspaces/:workspaceId
 // @access  Private
 const getWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.id);
+  const workspace = await Workspace.findById(request.params.workspaceId);
   const currentUserId = request.user._id;
 
   if (!workspace) {
@@ -28,7 +28,7 @@ const getWorkspace = asyncHandler(async (request, response) => {
   }
 
   const isValidUser = await Workspace.findOne({
-    _id: workspace._id,
+    _workspaceId: workspace._id,
     $or: [{ creator: currentUserId }, { members: { $in: [currentUserId] } }],
   })
     .then((workspace) => {
@@ -48,7 +48,7 @@ const getWorkspace = asyncHandler(async (request, response) => {
   }
 
   response.status(200).json({
-    _id: workspace._id,
+    _workspaceId: workspace._id,
     name: workspace.name,
     boards: workspace.boards,
     members: workspace.members,
@@ -74,7 +74,7 @@ const createWorkspace = asyncHandler(async (request, response) => {
 
   if (workspace) {
     response.status(200).json({
-      _id: workspace._id,
+      _workspaceId: workspace._id,
       name: workspace.name,
       creator: workspace.creator,
     });
@@ -87,10 +87,10 @@ const createWorkspace = asyncHandler(async (request, response) => {
 });
 
 // @desc    Edit an existing workspace's information
-// @route   PUT /api/workspaces/:id
+// @route   PUT /api/workspaces/:workspaceId
 // @access  Private
 const editWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.id);
+  const workspace = await Workspace.findById(request.params.workspaceId);
   const currentUserId = request.user._id;
   const { name, memberId } = request.body;
 
@@ -113,7 +113,7 @@ const editWorkspace = asyncHandler(async (request, response) => {
   const updatedWorkspace = await workspace.save();
 
   response.status(200).json({
-    _id: updatedWorkspace._id,
+    _workspaceId: updatedWorkspace._id,
     name: updatedWorkspace.name,
     members: updatedWorkspace.members,
     creator: updatedWorkspace.creator,
@@ -121,10 +121,10 @@ const editWorkspace = asyncHandler(async (request, response) => {
 });
 
 // @desc    Delete a workspace
-// @route   DELETE /api/workspaces/:id
+// @route   DELETE /api/workspaces/:workspaceId
 // @access  Private
 const deleteWorkspace = asyncHandler(async (request, response) => {
-  const id = request.params.id;
+  const workspaceId = request.params.workspaceId;
   const user = request.user._id;
 
   const workspace = await Workspace.findById(id);
@@ -139,7 +139,7 @@ const deleteWorkspace = asyncHandler(async (request, response) => {
     throw new Error("Only the creator can delete this workspace");
   }
 
-  await Workspace.deleteOne({ _id: id });
+  await Workspace.deleteOne({ _workspaceId: workspaceId });
 
   response.status(200).json({ message: "Workspace deleted" });
 });
