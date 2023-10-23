@@ -16,8 +16,48 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+interface Workspace {
+  id: string;
+  name: string;
+}
 
 export default function WorkspaceDialog() {
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch("http://localhost:8000/api/workspaces", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setWorkspaces(
+          data.workspaces.map((workspace) => ({
+            id: workspace._id,
+            name: workspace.name,
+          })),
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching workspaces:", error);
+      });
+  }, []);
+
   return (
     <Dialog>
       <DropdownMenu>
@@ -25,9 +65,15 @@ export default function WorkspaceDialog() {
           <p className="text-xl">Workspaces</p>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Workspace 1</DropdownMenuItem>
-          <DropdownMenuItem>Workspace 2</DropdownMenuItem>
-          <DropdownMenuItem>Workspace 3</DropdownMenuItem>
+          {workspaces.map((workspace) => {
+            return (
+              <Link href={`/workspace/${workspace.id}`} key={workspace.id}>
+                <DropdownMenuItem key={workspace.id}>
+                  {workspace.name}
+                </DropdownMenuItem>
+              </Link>
+            );
+          })}
           <DialogTrigger asChild>
             <DropdownMenuItem>Create New Workspace</DropdownMenuItem>
           </DialogTrigger>
@@ -38,7 +84,6 @@ export default function WorkspaceDialog() {
           <DialogTitle>Create New Workspace</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-
         <div className="grid gap-4 py-4">
           <div className="grid  items-center gap-4">
             <Label htmlFor="name" className="text-left text-sm">

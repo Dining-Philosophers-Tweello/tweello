@@ -20,7 +20,7 @@ import { signOut } from "next-auth/react";
 
 const ProfileDialog = () => {
   const handleSignout = async () => {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem("jwt");
     await signOut({ callbackUrl: "/" });
   };
 
@@ -35,7 +35,10 @@ const ProfileDialog = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/users/profile", requestOptions);
+      const response = await fetch(
+        "http://localhost:8000/api/users/profile",
+        requestOptions,
+      );
 
       if (response.ok) {
         await handleSignout();
@@ -43,8 +46,8 @@ const ProfileDialog = () => {
     } catch (error) {
       console.error(error);
     }
-  }
-  
+  };
+
   return (
     <Dialog>
       <DropdownMenu>

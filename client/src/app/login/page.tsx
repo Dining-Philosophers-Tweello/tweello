@@ -61,8 +61,7 @@ export default function AuthenticationPage() {
     email: string()
       .email("Email must be a valid email.")
       .required("Email is a required field."),
-    password: string()
-      .required("Required")
+    password: string().required("Required"),
   });
 
   const formik = useFormik({
