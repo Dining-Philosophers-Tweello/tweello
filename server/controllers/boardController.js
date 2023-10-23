@@ -2,23 +2,38 @@
 import asyncHandler from 'express-async-handler';
 import Board from '../models/boardModel.js';
 
-const createBoard = asyncHandler(async (req, res) => {
+// @desc    Create a new board
+// @route   POST /api/workspaces/:workspaceId/boards/:boardId
+// @access  Private
+const createBoard = asyncHandler(async (request, res) => {
     // To-do
  });
 
-const editBoard = asyncHandler(async (req, res) => {
-    // To-do
- });
- 
-const deleteBoard = asyncHandler(async (req, res) => {
+// @desc    Edit a board
+// @route   PUT //api/workspaces/:workspaceId/boards/:boardId
+// @access  Private
+const editBoard = asyncHandler(async (request, res) => {
     // To-do
  });
 
-const getBoards = asyncHandler(async (req, res) => {
+// @desc    Delete a board
+// @route   DELETE /api/workspaces/:workspaceId/boards/:boardId
+// @access  Private
+const deleteBoard = asyncHandler(async (request, res) => {
+    // To-do
+ });
+
+// @desc    Get a workspace's boards
+// @route   GET /api/workspaces/:workspaceId/boards/
+// @access  Private
+const getBoards = asyncHandler(async (request, res) => {
   // To-do
 });
 
-const getBoard = asyncHandler(async (req, res) => {
+// @desc    Get a workspace's board
+// @route   GET /api/workspaces/:workspaceId/boards/:id
+// @access  Private
+const getBoard = asyncHandler(async (request, res) => {
    // To-do
 });
 
