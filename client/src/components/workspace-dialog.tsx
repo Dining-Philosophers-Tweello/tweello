@@ -29,7 +29,6 @@ export default function WorkspaceDialog() {
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
-    console.log(jwt);
     const requestOptions = {
       method: "GET",
       headers: {

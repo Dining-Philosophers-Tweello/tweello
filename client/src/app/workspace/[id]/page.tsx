@@ -68,11 +68,8 @@ interface Workspace {
 export default function WorkspacePage({ params }: { params: { id: string } }) {
   const [workspace, setWorkspace] = useState<Workspace | null>();
 
-  console.log(workspace);
-
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
-    console.log(jwt);
     const requestOptions = {
       method: "GET",
       headers: {
