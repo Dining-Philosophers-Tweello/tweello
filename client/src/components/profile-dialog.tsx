@@ -63,11 +63,7 @@ const ProfileDialog = () => {
           <DialogTrigger asChild>
             <DropdownMenuItem>Delete Profile</DropdownMenuItem>
           </DialogTrigger>
-          <DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSignout}>
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignout}>Sign Out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>
