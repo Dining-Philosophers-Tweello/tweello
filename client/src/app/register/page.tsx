@@ -8,7 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { object, ref, string } from "yup";
 
 export default function Register() {
@@ -20,7 +20,6 @@ export default function Register() {
       router.replace("/home");
     }
   }, [status, router]);
-  const [error, setError] = useState(null);
 
   type FormValues = {
     name: string;
@@ -61,6 +60,9 @@ export default function Register() {
         },
       });
       if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("jwt", data.token);
+
         await signIn("credentials", {
           email: values.email,
           password: values.password,
@@ -104,7 +106,7 @@ export default function Register() {
                   onSubmit={formik.handleSubmit}
                 >
                   <div className="grid gap-2">
-                    <Label>First Name</Label>
+                    <Label>Name</Label>
                     <Input
                       id="name"
                       name="name"

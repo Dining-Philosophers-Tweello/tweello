@@ -30,24 +30,31 @@ export default function AuthenticationPage() {
 
   const handleSubmit = async (values: FormValues) => {
     try {
-      const { email, password } = values;
-      const res = await signIn("credentials", {
-        email,
-        password,
-        callbackUrl: "/home",
+      const response = await fetch("http://localhost:8000/api/users/auth", {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      if (res.error) {
-        setError(res.error);
-      } else if (res.ok) {
-        // Handle successful authentication here
-        setError(res.error);
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("jwt", data.token);
+
+        const res = await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          callbackUrl: "/home",
+        });
+
+        if (res.error) {
+          setError(res.error);
+        }
       }
     } catch (error) {
-      console.error("Error: ", error);
+      console.error(error);
     }
-
-    // Handle other cases if needed
   };
 
   const validationSchema = object({
@@ -56,14 +63,6 @@ export default function AuthenticationPage() {
       .required("Email is a required field."),
     password: string()
       .required("Required")
-      .min(
-        6,
-        "Minimum 6 characters, at least one number, and special character.",
-      )
-      .matches(
-        /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]+$/,
-        "Minimum 6 characters, at least one number, and special character.",
-      ),
   });
 
   const formik = useFormik({
