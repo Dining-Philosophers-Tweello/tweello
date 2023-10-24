@@ -1,5 +1,6 @@
 // controllers/boardController.js
 import asyncHandler from 'express-async-handler';
+import Workspace from "../models/workspaceModel.js";
 import Board from '../models/boardModel.js';
 
 // @desc    Create a new board
@@ -15,7 +16,7 @@ const createBoard = asyncHandler(async (request, response) => {
 
   if (!workspace) {
     response.status(404);
-    throw new Error("Workspace not found");
+    throw new Error("Board not found");
   }
 
   if (workspace.creator.toString() !== request.user._id.toString() && !workspace.members.includes(request.user._id)) {

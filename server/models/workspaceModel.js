@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Board from './boardModel.js';
 
 const workspaceSchema = mongoose.Schema(
   {

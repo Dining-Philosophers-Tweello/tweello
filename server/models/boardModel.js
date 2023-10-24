@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import BoardSchema from './workspaceModel.js';
 
 const columnSchema = new mongoose.Schema({});
 const boardSchema = new mongoose.Schema(
