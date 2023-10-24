@@ -97,7 +97,7 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
 
   if (!workspace) {
     return (
-      <div className="flex items-center justify-center w-screen h-screen border border-red-500">
+      <div className="flex items-center justify-center w-screen h-screen">
         <Icons.spinner className="h-10 w-10 animate-spin" />
       </div>
     );
