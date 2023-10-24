@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 
 const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -45,6 +46,21 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
+      });
+
+    fetch("http://localhost:8000/api/users/profile", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setCurrentUserId(data._id);
+      })
+      .catch((error) => {
+        console.error("Error fetching user profile:", error);
       });
   }, []);
 
@@ -102,11 +118,13 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
                 <SelectValue placeholder="Select an email" />
               </SelectTrigger>
               <SelectContent>
-                {users.map((user) => (
-                  <SelectItem key={user._id} value={user._id}>
-                    {user.email}
-                  </SelectItem>
-                ))}
+                {users
+                  .filter((user) => user._id !== currentUserId)
+                  .map((user) => (
+                    <SelectItem key={user._id} value={user._id}>
+                      {user.email}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
