@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-
 import {
   Dialog,
   DialogClose,
@@ -10,8 +9,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
-const DeleteWorkspaceDialog = () => {
+const DeleteWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
+  const router = useRouter();
+  const handleSubmit = () => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    };
+
+    fetch(`http://localhost:8000/api/workspaces/${workspaceId}`, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then(() => {
+        router.replace("/home");
+      })
+      .catch((error) => {
+        console.error("Error deleting workspace:", error);
+      });
+  };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -33,7 +59,12 @@ const DeleteWorkspaceDialog = () => {
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button className="w-1/2 mr-2" variant="destructive" type="submit">
+            <Button
+              className="w-1/2 mr-2"
+              variant="destructive"
+              type="submit"
+              onClick={handleSubmit}
+            >
               Delete
             </Button>
           </DialogClose>
