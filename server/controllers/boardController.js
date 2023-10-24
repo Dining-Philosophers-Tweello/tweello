@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import Board from '../models/boardModel.js';
 
 // @desc    Create a new board
-// @route   POST /api/workspaces/:workspaceId/boards/:boardId
+// @route   POST /api/workspaces/:workspaceId/boards
 // @access  Private
 const createBoard = asyncHandler(async (request, response) => {
   const { name } = request.body;
