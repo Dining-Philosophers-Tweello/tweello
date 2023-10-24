@@ -31,18 +31,10 @@ export default function WorkspaceDialog() {
   const router = useRouter();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
-  const [newWorkspaceId, setNewWorkspaceId] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewWorkspaceName(e.target.value);
   };
-
-  useEffect(() => {
-    if (newWorkspaceId !== "") {
-      router.push(`/workspace/${newWorkspaceId}`);
-      setNewWorkspaceName("");
-    }
-  }, [newWorkspaceId]);
 
   const handleSubmit = () => {
     const jwt = localStorage.getItem("jwt");
@@ -65,7 +57,8 @@ export default function WorkspaceDialog() {
       })
       .then((data) => {
         setWorkspaces([...workspaces, { id: data._id, name: data.name }]);
-        setNewWorkspaceId(data._id);
+        router.push(`/workspace/${data._id}`);
+        setNewWorkspaceName("");
       })
       .catch((error) => {
         console.error("Error creating workspace:", error);
@@ -87,7 +80,6 @@ export default function WorkspaceDialog() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         return response.json();
       })
       .then((data) => {
@@ -104,7 +96,13 @@ export default function WorkspaceDialog() {
   }, []);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        setNewWorkspaceName("");
+      }}
+    >
       <DropdownMenu>
         <DropdownMenuTrigger>
           <p className="text-xl">Workspaces</p>
