@@ -1,4 +1,3 @@
-// routes/boardRoutes.js
 import express from 'express';
 import {
   createBoard,
@@ -7,10 +6,10 @@ import {
   getBoard,
   getBoards,
 } from '../controllers/boardController.js';
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.route('/').get(getBoards).post(createBoard);
-router.route('/:id').get(getBoard).put(editBoard).delete(deleteBoard);
+router.route("/").get(protect, getBoards).post(protect, createBoard).delete(protect, deleteBoard);
 
 export default router;
