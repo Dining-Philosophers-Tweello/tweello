@@ -1,22 +1,5 @@
 import mongoose from "mongoose";
-
-const columnSchema = new mongoose.Schema({});
-
-const boardSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-    },
-    columns: [columnSchema]
-  },
-  {
-    timestamps: true,
-  },
-);
+import Board from './boardModel.js';
 
 const workspaceSchema = mongoose.Schema(
   {
@@ -25,7 +8,11 @@ const workspaceSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    boards: [boardSchema],
+    boards:
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Board',
+    },
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,9 +31,5 @@ const workspaceSchema = mongoose.Schema(
 );
 
 const Workspace = mongoose.model("Workspace", workspaceSchema);
-const Board = mongoose.model("Board", boardSchema);
 
-export {
-  Workspace,
-  Board,
-};
+export default Workspace;

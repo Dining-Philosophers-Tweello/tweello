@@ -1,18 +1,22 @@
-// boardModel.js
 import mongoose from 'mongoose';
+import BoardSchema from './workspaceModel.js';
 
-const boardSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const columnSchema = new mongoose.Schema({});
+const boardSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    columns: [columnSchema]
   },
-  workspace: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Workspace', 
-    required: true,
+  {
+    timestamps: true,
   },
-  // Add other fields as needed
-});
+);
 
 const Board = mongoose.model('Board', boardSchema);
 
