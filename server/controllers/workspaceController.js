@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import Workspace from "../models/workspaceModel.js";
+import { Workspace } from "../models/workspaceModel.js";
 
 // @desc    Get a user's workspaces
 // @route   GET /api/workspaces

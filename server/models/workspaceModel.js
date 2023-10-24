@@ -11,7 +11,7 @@ const boardSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    columns: [columnSchema]
+    columns: [columnSchema],
   },
   {
     timestamps: true,
@@ -46,7 +46,4 @@ const workspaceSchema = mongoose.Schema(
 const Workspace = mongoose.model("Workspace", workspaceSchema);
 const Board = mongoose.model("Board", boardSchema);
 
-export {
-  Workspace,
-  Board,
-};
+export { Board, Workspace };
