@@ -23,37 +23,37 @@ interface BoardCardData {
 
 const boardsData: BoardCardData[] = [
   {
-    link: "/",
+    link: "/board",
     title: "Project A",
     description:
       "Ut enim ad minim veniam, exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    link: "/",
+    link: "/board",
     title: "Project B",
     description:
       "Lorem ipsum dolor sit amet, ut labore et dolore magna aliqua.",
   },
   {
-    link: "/",
+    link: "/board",
     title: "Project C",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipisci, sed do eiusmod tempor incididunt ut.",
   },
   {
-    link: "/",
+    link: "/board",
     title: "Project D",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
-    link: "/",
+    link: "/board",
     title: "Project E",
     description:
       "Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat.",
   },
   {
-    link: "/",
+    link: "/board",
     title: "Project F",
     description: "Lorem ipsum dolor sit amet.",
   },
