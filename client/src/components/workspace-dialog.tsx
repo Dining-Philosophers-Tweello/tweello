@@ -93,7 +93,7 @@ export default function WorkspaceDialog() {
       .catch((error) => {
         console.error("Error fetching workspaces:", error);
       });
-  }, []);
+  });
 
   return (
     <Dialog
