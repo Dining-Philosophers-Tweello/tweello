@@ -121,7 +121,7 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
               </DialogHeader>
             </DialogContent>
           </Dialog>
-          <ShareWorkspaceDialog workspaceId={params.id}/>
+          <ShareWorkspaceDialog workspaceId={params.id} />
           <DeleteWorkspaceDialog />
         </div>
         <div className="flex gap-5 flex-wrap">

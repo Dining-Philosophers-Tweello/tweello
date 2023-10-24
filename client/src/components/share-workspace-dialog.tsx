@@ -80,8 +80,6 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
       if (response.ok) {
         setOpen(false);
       }
-
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
