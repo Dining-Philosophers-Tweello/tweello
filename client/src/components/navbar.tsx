@@ -1,5 +1,7 @@
+"use client";
 import { ModeToggle } from "@/components/mode-toggle";
 import WorkspaceDialog from "@/components/workspace-dialog";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import DeleteWorkspaceDialog from "./delete-workspace-dialog";
 import ProfileDialog from "./profile-dialog";
@@ -15,6 +17,10 @@ const emails = [
 ];
 
 const Navbar = () => {
+  const { status } = useSession();
+  if (status !== "authenticated") {
+    return <div></div>;
+  }
   return (
     <nav className="w-full p-6 border-b border-gray-300">
       <div className="container mx-auto flex justify-between items-center">
