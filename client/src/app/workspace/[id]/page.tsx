@@ -1,7 +1,9 @@
 "use client";
 
 import { BoardCard } from "@/components/board-card";
+import DeleteWorkspaceDialog from "@/components/delete-workspace-dialog";
 import { Icons } from "@/components/icons";
+import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
 import {
   Dialog,
   DialogContent,
@@ -119,6 +121,8 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
               </DialogHeader>
             </DialogContent>
           </Dialog>
+          <ShareWorkspaceDialog workspaceId={params.id}/>
+          <DeleteWorkspaceDialog />
         </div>
         <div className="flex gap-5 flex-wrap">
           {boardsData.map((board) => (
