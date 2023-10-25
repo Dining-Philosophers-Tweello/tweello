@@ -1,5 +1,23 @@
 import mongoose from "mongoose";
 
+const columnSchema = new mongoose.Schema({});
+
+const boardSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    columns: [columnSchema],
+  },
+  {
+    timestamps: true,
+  },
+);
+
 const workspaceSchema = mongoose.Schema(
   {
     name: {
@@ -7,11 +25,7 @@ const workspaceSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    boards:
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Board',
-    },
+    boards: [boardSchema],
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,

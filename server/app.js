@@ -6,7 +6,6 @@ import connectDB from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
 import workspaceRoutes from "./routes/workspaceRoutes.js";
-import boardRoutes from './routes/boardRoutes.js';
 
 dotenv.config();
 const port = process.env.PORT;
@@ -20,7 +19,6 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 app.use("/api/workspaces", workspaceRoutes);
-app.use('/api/workspaces/:workspaceId/boards', boardRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is ready!");
