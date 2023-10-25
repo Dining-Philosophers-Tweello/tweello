@@ -1,7 +1,7 @@
 "use client";
 
 import { BoardCard } from "@/components/board-card";
-import DeleteWorkspaceDialog from "@/components/delete-workspace-dialog";
+import DeleteDialog from "@/components/delete-dialog";
 import { Icons } from "@/components/icons";
 import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
 import {
@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface BoardCardData {
@@ -69,6 +69,7 @@ interface Workspace {
 
 export default function WorkspacePage({ params }: { params: { id: string } }) {
   const [workspace, setWorkspace] = useState<Workspace | null>();
+  const router = useRouter();
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
@@ -94,6 +95,31 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
         console.error("Error fetching workspaces:", error);
       });
   }, []);
+
+  const handleDelete = () => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    };
+
+    fetch(`http://localhost:8000/api/workspaces/${params.id}`, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then(() => {
+        router.replace("/home");
+      })
+      .catch((error) => {
+        console.error("Error deleting workspace:", error);
+      });
+  };
 
   if (!workspace) {
     return (
@@ -122,7 +148,10 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
             </DialogContent>
           </Dialog>
           <ShareWorkspaceDialog workspaceId={params.id} />
-          <DeleteWorkspaceDialog workspaceId={params.id} />
+          <DeleteDialog
+            componentName={"Workspace"}
+            handleDelete={handleDelete}
+          />
         </div>
         <div className="flex gap-5 flex-wrap">
           {boardsData.map((board) => (
