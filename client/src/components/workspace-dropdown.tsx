@@ -26,7 +26,7 @@ interface Workspace {
   name: string;
 }
 
-export default function WorkspaceDialog() {
+export default function WorkspaceDropdown() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
