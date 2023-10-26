@@ -9,11 +9,8 @@ const createBoard = asyncHandler(async (request, response) => {
   const currentUserId = request.user._id;
   const workspaceId = request.params.workspaceId;
 
-  console.log(request.params.workspaceId);
-
   // Check if the user has access to the workspace
   const workspace = await Workspace.findById(workspaceId);
-  console.log(workspace);
 
   if (!workspace) {
     response.status(404);
