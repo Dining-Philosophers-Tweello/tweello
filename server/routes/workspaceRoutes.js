@@ -20,9 +20,9 @@ router
 
 // Board Routes
 router.route("/:workspaceId/boards").get(protect, getBoards).post(protect, createBoard);
-router
-  .put('/:workspaceId/boards/:boardId', protect, editBoard)
-  .delete('/:workspaceId/boards/:boardId', protect, deleteBoard)
-  .get('/:workspaceId/boards/:boardId', protect, getBoard);
+router.route('/:workspaceId/boards/:boardId')
+  .put(protect, editBoard)
+  .delete(protect, deleteBoard)
+  .get(protect, getBoard);
 
 export default router;
