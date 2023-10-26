@@ -1,4 +1,4 @@
-import asyncHandler from 'express-async-handler';
+import asyncHandler from "express-async-handler";
 import Workspace from "../models/workspaceModel.js";
 
 // @desc    Create a new board
@@ -8,7 +8,7 @@ const createBoard = asyncHandler(async (request, response) => {
   const { name, description } = request.body;
   const currentUserId = request.user._id;
   const workspaceId = request.params.workspaceId;
-  
+
   console.log(request.params.workspaceId);
 
   // Check if the user has access to the workspace
@@ -20,43 +20,45 @@ const createBoard = asyncHandler(async (request, response) => {
     throw new Error("Workspace not found");
   }
 
-  if (workspace.creator.toString() !== currentUserId.toString() && !workspace.members.includes(currentUserId)) {
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
     response.status(403);
     throw new Error("Unauthorized access to this workspace");
   }
 
   // Check if a board with the same name exists in the workspace
-  const boardExists = workspace.boards.find(board => board.name === name);
+  const boardExists = workspace.boards.find((board) => board.name === name);
 
   if (boardExists) {
     response.status(400);
     throw new Error("Board with this name already exists in the workspace");
   }
 
-  workspace.boards.push({ name:name, description:description }); 
+  workspace.boards.push({ name: name, description: description });
   const updatedWorkspace = await workspace.save();
 
-
-    response.status(201).json({
-      _id: workspace.boards[workspace.boards.length - 1].id,
-      name: workspace.boards[workspace.boards.length - 1].name,
-      description: workspace.boards[workspace.boards.length - 1].description
-    });
+  response.status(201).json({
+    _id: workspace.boards[workspace.boards.length - 1].id,
+    name: workspace.boards[workspace.boards.length - 1].name,
+    description: workspace.boards[workspace.boards.length - 1].description,
+  });
 });
 
 // @desc    Edit a board
 // @route   PUT /api/workspaces/:workspaceId/boards/:boardId
 // @access  Private
 const editBoard = asyncHandler(async (request, response) => {
-    // To-do
- });
+  // To-do
+});
 
 // @desc    Delete a board
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId
 // @access  Private
 const deleteBoard = asyncHandler(async (request, response) => {
-    // To-do
- });
+  // To-do
+});
 
 // @desc    Get a workspace's boards
 // @route   GET /api/workspaces/:workspaceId/boards/
@@ -69,7 +71,7 @@ const getBoards = asyncHandler(async (request, response) => {
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId
 // @access  Private
 const getBoard = asyncHandler(async (request, response) => {
-   // To-do
+  // To-do
 });
 
 export { createBoard, deleteBoard, editBoard, getBoard, getBoards };

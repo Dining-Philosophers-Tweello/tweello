@@ -1,5 +1,11 @@
 import express from "express";
-import { createBoard, deleteBoard, editBoard, getBoard, getBoards } from "../controllers/boardController.js";
+import {
+  createBoard,
+  deleteBoard,
+  editBoard,
+  getBoard,
+  getBoards,
+} from "../controllers/boardController.js";
 import {
   createWorkspace,
   deleteWorkspace,
@@ -19,8 +25,12 @@ router
   .delete(protect, deleteWorkspace);
 
 // Board Routes
-router.route("/:workspaceId/boards").get(protect, getBoards).post(protect, createBoard);
-router.route('/:workspaceId/boards/:boardId')
+router
+  .route("/:workspaceId/boards")
+  .get(protect, getBoards)
+  .post(protect, createBoard);
+router
+  .route("/:workspaceId/boards/:boardId")
   .put(protect, editBoard)
   .delete(protect, deleteBoard)
   .get(protect, getBoard);

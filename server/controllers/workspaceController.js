@@ -149,5 +149,5 @@ export {
   deleteWorkspace,
   editWorkspace,
   getWorkspace,
-  getWorkspaces
+  getWorkspaces,
 };

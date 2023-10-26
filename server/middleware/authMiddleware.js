@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 
 const protect = asyncHandler(async (request, response, next) => {
   let token;
-  token = request.headers.authorization.split(' ')[1];
+  token = request.headers.authorization.split(" ")[1];
 
   if (token) {
     try {
