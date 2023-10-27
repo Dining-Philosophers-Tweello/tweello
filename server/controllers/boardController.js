@@ -77,6 +77,16 @@ const editBoard = asyncHandler(async (request, response) => {
     throw new Error("Board not found");
   }
 
+  // Check if a board with the same name already exists in the workspace
+  const boardWithSameName = workspace.boards.find(
+    (board) => board.name === name && board._id.toString() !== boardId
+  );
+
+  if (boardWithSameName) {
+    response.status(400);
+    throw new Error("Board with this name already exists in the workspace");
+  }
+
   // Update the board's information
   boardToEdit.name = name || boardToEdit.name;
   boardToEdit.description = description || boardToEdit.description;
