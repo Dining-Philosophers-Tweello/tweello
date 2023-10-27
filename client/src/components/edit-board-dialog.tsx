@@ -3,14 +3,12 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function EditBoardDialog() {
@@ -25,13 +23,9 @@ export default function EditBoardDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Board</DialogTitle>
-          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid  items-center gap-4">
-            <Label htmlFor="name" className="text-left text-sm">
-              Board Info
-            </Label>
             <Input
               id="board-name"
               name="board-name"
