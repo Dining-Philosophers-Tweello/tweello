@@ -1,17 +1,10 @@
 "use client";
 
 import { BoardCard } from "@/components/board-card";
+import CreateBoardDialog from "@/components/create-board-dialog";
 import DeleteDialog from "@/components/delete-dialog";
 import { Icons } from "@/components/icons";
 import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -134,19 +127,7 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
       <div className="flex flex-col gap-5 p-5 w-screen h-screen">
         <div className="flex flex-row gap-5">
           <div className="text-3xl">{workspace.name}</div>
-          <Dialog>
-            <DialogTrigger>
-              <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                Create Board
-              </div>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create new board</DialogTitle>
-                <DialogDescription>Create new board</DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <CreateBoardDialog />
           <ShareWorkspaceDialog workspaceId={params.id} />
           <DeleteDialog
             componentName={"Workspace"}

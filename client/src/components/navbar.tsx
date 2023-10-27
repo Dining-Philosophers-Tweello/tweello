@@ -1,6 +1,6 @@
 "use client";
 import { ModeToggle } from "@/components/mode-toggle";
-import WorkspaceDialog from "@/components/workspace-dialog";
+import WorkspaceDropdown from "@/components/workspace-dropdown";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import ProfileDialog from "./profile-dialog";
@@ -21,7 +21,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <WorkspaceDialog />
+            <WorkspaceDropdown />
           </li>
         </ul>
         <ul className="flex space-x-6">
