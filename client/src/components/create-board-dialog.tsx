@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -22,7 +21,6 @@ export default function CreateBoardDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Board</DialogTitle>
-          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid  items-center gap-4">
