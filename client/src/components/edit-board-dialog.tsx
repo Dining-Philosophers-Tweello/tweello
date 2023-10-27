@@ -13,21 +13,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function EditBoardDialog({
-  componentName,
-  handleEdit,
-}: {
-  componentName: string;
-  handleEdit: () => void;
-}) {
+export default function EditBoardDialog() {
+  const handleEdit = () => {
+    console.log("Edited board");
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>{`Edit ${componentName}`}</Button>
+        <Button>Edit Board</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{`Edit ${componentName}`}</DialogTitle>
+          <DialogTitle>Edit Board</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
