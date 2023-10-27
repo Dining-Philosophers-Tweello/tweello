@@ -19,7 +19,7 @@ const getWorkspaces = asyncHandler(async (request, response) => {
 // @route   GET /api/workspaces/:id
 // @access  Private
 const getWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.id);
+  const workspace = await Workspace.findById(request.params.workspaceId);
   const currentUserId = request.user._id;
 
   if (!workspace) {
@@ -90,7 +90,7 @@ const createWorkspace = asyncHandler(async (request, response) => {
 // @route   PUT /api/workspaces/:id
 // @access  Private
 const editWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.id);
+  const workspace = await Workspace.findById(request.params.workspaceId);
   const currentUserId = request.user._id;
   const { name, memberId } = request.body;
 
@@ -124,10 +124,10 @@ const editWorkspace = asyncHandler(async (request, response) => {
 // @route   DELETE /api/workspaces/:id
 // @access  Private
 const deleteWorkspace = asyncHandler(async (request, response) => {
-  const id = request.params.id;
+  const workspaceId = request.params.workspaceId;
   const user = request.user._id;
 
-  const workspace = await Workspace.findById(id);
+  const workspace = await Workspace.findById(workspaceId);
 
   if (!workspace) {
     response.status(404);
@@ -139,7 +139,7 @@ const deleteWorkspace = asyncHandler(async (request, response) => {
     throw new Error("Only the creator can delete this workspace");
   }
 
-  await Workspace.deleteOne({ _id: id });
+  await Workspace.deleteOne({ _id: workspaceId });
 
   response.status(200).json({ message: "Workspace deleted" });
 });
