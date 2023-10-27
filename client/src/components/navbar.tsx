@@ -1,20 +1,10 @@
 "use client";
 import { ModeToggle } from "@/components/mode-toggle";
-import WorkspaceDialog from "@/components/workspace-dialog";
+import WorkspaceDropdown from "@/components/workspace-dropdown";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import DeleteWorkspaceDialog from "./delete-workspace-dialog";
 import ProfileDialog from "./profile-dialog";
 import ProfileSettingsDialog from "./profile-settings-dialog";
-import ShareWorkspaceDialog from "./share-workspace-dialog";
-
-const emails = [
-  "diego@gmail.com",
-  "jordan@gmail.com",
-  "sarah@gmail.com",
-  "grant@gmail.com",
-  "daniel@gmail.com",
-];
 
 const Navbar = () => {
   const { status } = useSession();
@@ -31,13 +21,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <WorkspaceDialog />
-          </li>
-          <li>
-            <ShareWorkspaceDialog emails={emails} />
-          </li>
-          <li>
-            <DeleteWorkspaceDialog />
+            <WorkspaceDropdown />
           </li>
         </ul>
         <ul className="flex space-x-6">

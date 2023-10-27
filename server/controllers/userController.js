@@ -118,11 +118,25 @@ const getUserProfile = asyncHandler(async (request, response) => {
   }
 });
 
+// @desc    Get users
+// @route   GET /api/users
+// @access  Private
+const getUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500);
+    throw new Error("Internal server error");
+  }
+});
+
 export {
   authUser,
   deleteUser,
   editUserProfile,
   getUserProfile,
+  getUsers,
   logoutUser,
   registerUser,
 };

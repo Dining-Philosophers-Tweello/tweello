@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-
 import {
   Dialog,
   DialogClose,
@@ -16,32 +15,116 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
-interface ShareWorkspaceDialogProps {
-  emails: string[];
-}
+const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-const ShareWorkspaceDialog = ({ emails }: ShareWorkspaceDialogProps) => {
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch("http://localhost:8000/api/users", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setUsers(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+
+    fetch("http://localhost:8000/api/users/profile", requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setCurrentUserId(data._id);
+      })
+      .catch((error) => {
+        console.error("Error fetching user profile:", error);
+      });
+  }, []);
+
+  const handleOpenChange = () => {
+    setOpen(!open);
+    setSelectedUser(null);
+  };
+
+  const handleValueChange = (value: string) => {
+    setSelectedUser(value);
+  };
+
+  const handleSubmit = async () => {
+    const body = {
+      memberId: selectedUser,
+    };
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "PUT",
+      body: JSON.stringify(body),
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/workspaces/${workspaceId}`,
+        requestOptions,
+      );
+
+      if (response.ok) {
+        setOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger>
-        <p className="text-xl">Share Workspace</p>
+        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+          Share Workspace
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Share Workspace</DialogTitle>
           <div className="text-sm text-muted-foreground pt-[20px]">
             <p className="pb-[5px]">Share with</p>
-            <Select>
+            <Select onValueChange={handleValueChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select an email" />
               </SelectTrigger>
               <SelectContent>
-                {emails.map((email) => (
-                  <SelectItem key={email} value={email}>
-                    {email}
-                  </SelectItem>
-                ))}
+                {users
+                  .filter((user) => user._id !== currentUserId)
+                  .map((user) => (
+                    <SelectItem key={user._id} value={user._id}>
+                      {user.email}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -52,11 +135,14 @@ const ShareWorkspaceDialog = ({ emails }: ShareWorkspaceDialogProps) => {
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button className="w-1/2 mr-2" type="submit">
-              Share
-            </Button>
-          </DialogClose>
+          <Button
+            className="w-1/2 mr-2"
+            type="submit"
+            disabled={!selectedUser}
+            onClick={handleSubmit}
+          >
+            Share
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
