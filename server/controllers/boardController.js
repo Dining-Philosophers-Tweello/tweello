@@ -105,7 +105,44 @@ const editBoard = asyncHandler(async (request, response) => {
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId
 // @access  Private
 const deleteBoard = asyncHandler(async (request, response) => {
-  // To-do
+  const workspaceId = request.params.workspaceId;
+  const boardId = request.params.boardId;
+  const currentUserId = request.user._id;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
+  // Find the board to delete
+  const board = workspace.boards.id(boardId);
+
+  if (!board) {
+    response.status(404);
+    throw new Error("Board not found");
+  }
+
+  // Delete the board using the _id of the board
+  await Workspace.updateOne(
+    { _id: workspaceId },
+    { $pull: { boards: { _id: boardId } } },
+  );
+
+  // Save the updated workspace without the deleted board
+  const updatedWorkspace = await Workspace.findById(workspaceId);
+  response.status(200).json({ message: "Board deleted successfully" });
 });
 
 // @desc    Get a workspace's boards
