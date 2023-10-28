@@ -141,7 +141,6 @@ const deleteBoard = asyncHandler(async (request, response) => {
   );
 
   // Save the updated workspace without the deleted board
-  const updatedWorkspace = await Workspace.findById(workspaceId);
   response.status(200).json({ message: "Board deleted successfully" });
 });
 
