@@ -144,17 +144,51 @@ const deleteBoard = asyncHandler(async (request, response) => {
   response.status(200).json({ message: "Board deleted successfully" });
 });
 
-// @desc    Get a workspace's boards
-// @route   GET /api/workspaces/:workspaceId/boards/
-// @access  Private
-const getBoards = asyncHandler(async (request, response) => {
-  // To-do
-});
-
 // @desc    Get a workspace's board
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId
 // @access  Private
 const getBoard = asyncHandler(async (request, response) => {
+  const workspaceId = request.params.workspaceId;
+  const boardId = request.params.boardId;
+  const currentUserId = request.user._id;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
+  // Find the board to get
+  const boardToGet = workspace.boards.id(boardId);
+
+  if (!boardToGet) {
+    response.status(404);
+    throw new Error("Board not found");
+  }
+
+  response.status(200).json({
+    _id: boardToGet._id,
+    name: boardToGet.name,
+    description: boardToGet.description,
+    columns: boardToGet.columns,
+  });
+});
+
+// @desc    Get a workspace's boards
+// @route   GET /api/workspaces/:workspaceId/boards/
+// @access  Private
+const getBoards = asyncHandler(async (request, response) => {
   // To-do
 });
 
