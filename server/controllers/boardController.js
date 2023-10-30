@@ -181,6 +181,7 @@ const getBoard = asyncHandler(async (request, response) => {
     _id: boardToGet._id,
     name: boardToGet.name,
     description: boardToGet.description,
+    columns: boardToGet.columns,
   });
 });
 
