@@ -189,7 +189,14 @@ const getBoard = asyncHandler(async (request, response) => {
 // @route   GET /api/workspaces/:workspaceId/boards/
 // @access  Private
 const getBoards = asyncHandler(async (request, response) => {
-  // To-do
+  const workspaceId = request.params.workspaceId;
+  const currentUserId = request.user._id;
+
+  const workspace = await Workspace.findById(workspaceId);
+
+  response.status(200).json({
+    boards: workspace.boards,
+  });
 });
 
 export { createBoard, deleteBoard, editBoard, getBoard, getBoards };
