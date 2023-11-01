@@ -194,6 +194,20 @@ const getBoards = asyncHandler(async (request, response) => {
 
   const workspace = await Workspace.findById(workspaceId);
 
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
   response.status(200).json({
     boards: workspace.boards,
   });
