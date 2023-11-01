@@ -35,4 +35,15 @@ router
   .delete(protect, deleteBoard)
   .get(protect, getBoard);
 
+// Column Routes
+router
+  .route("/:workspaceId/boards/:boardId/columns")
+  .get(protect, getColumns)
+  .post(protect, createColumn);
+router
+  .route("/:workspaceId/boards/:boardId/columns/:columnId")
+  .put(protect, editColumn)
+  .delete(protect, deleteColumn)
+  .get(protect, getColumn);
+
 export default router;
