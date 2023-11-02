@@ -2,10 +2,41 @@
 
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
+import { useRouter } from "next/navigation";
 
-export default function Board({ params }: { params: { boardId: string } }) {
+export default function Board({
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
+  const router = useRouter();
+
   const handleDelete = () => {
-    console.log("Deleted board");
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    };
+
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
+      requestOptions,
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then(() => {
+        router.replace(`/workspaces/${params.workspaceId}`);
+      })
+      .catch((error) => {
+        console.error("Error deleting board:", error);
+      });
   };
 
   return (
