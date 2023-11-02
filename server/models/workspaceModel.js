@@ -1,6 +1,22 @@
 import mongoose from "mongoose";
 
-const columnSchema = new mongoose.Schema({});
+const taskSchema = new mongoose.Schema({});
+
+const columnSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    tasks: [taskSchema],
+  },
+  {
+    timestamps: true,
+  },
+);
 
 const boardSchema = new mongoose.Schema(
   {
