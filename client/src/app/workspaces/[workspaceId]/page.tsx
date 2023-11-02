@@ -112,7 +112,7 @@ export default function WorkspacePage({
               {workspace.boards.map((board) => (
                 <BoardCard
                   key={board["_id"]}
-                  link={`/workspace/${params.workspaceId}/board/${board["_id"]}`}
+                  link={`/workspaces/${params.workspaceId}/boards/${board["_id"]}`}
                   title={board["name"]}
                   description={board["description"]}
                 />
