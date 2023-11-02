@@ -26,6 +26,7 @@ const workspaceSchema = mongoose.Schema(
       unique: true,
     },
     boards: [boardSchema],
+    columns: [columnSchema],
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
