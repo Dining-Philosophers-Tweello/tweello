@@ -57,7 +57,7 @@ export default function WorkspaceDropdown() {
       })
       .then((data) => {
         setWorkspaces([...workspaces, { id: data._id, name: data.name }]);
-        router.push(`/workspace/${data._id}`);
+        router.push(`/workspaces/${data._id}`);
         setNewWorkspaceName("");
       })
       .catch((error) => {
@@ -110,7 +110,7 @@ export default function WorkspaceDropdown() {
         <DropdownMenuContent>
           {workspaces.map((workspace) => {
             return (
-              <Link href={`/workspace/${workspace.id}`} key={workspace.id}>
+              <Link href={`/workspaces/${workspace.id}`} key={workspace.id}>
                 <DropdownMenuItem key={workspace.id}>
                   {workspace.name}
                 </DropdownMenuItem>
