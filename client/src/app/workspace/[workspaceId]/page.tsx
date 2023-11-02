@@ -16,7 +16,11 @@ interface Workspace {
   creator: string;
 }
 
-export default function WorkspacePage({ params }: { params: { id: string } }) {
+export default function WorkspacePage({
+  params,
+}: {
+  params: { workspaceId: string };
+}) {
   const [workspace, setWorkspace] = useState<Workspace | null>();
   const router = useRouter();
 
@@ -30,7 +34,10 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
       },
     };
 
-    fetch(`http://localhost:8000/api/workspaces/${params.id}`, requestOptions)
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}`,
+      requestOptions,
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -54,7 +61,10 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
       },
     };
 
-    fetch(`http://localhost:8000/api/workspaces/${params.id}`, requestOptions)
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}`,
+      requestOptions,
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -84,7 +94,7 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
         <div className="flex flex-row gap-5">
           <div className="text-3xl">{workspace.name}</div>
           <CreateBoardDialog />
-          <ShareWorkspaceDialog workspaceId={params.id} />
+          <ShareWorkspaceDialog workspaceId={params.workspaceId} />
           <DeleteDialog
             componentName={"Workspace"}
             handleDelete={handleDelete}
@@ -102,7 +112,7 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
               {workspace.boards.map((board) => (
                 <BoardCard
                   key={board["_id"]}
-                  link={`/board/${board["_id"]}`} // TODO: Will be changed in TWEEL-127
+                  link={`/workspace/${params.workspaceId}/board/${board["_id"]}`}
                   title={board["name"]}
                   description={board["description"]}
                 />
