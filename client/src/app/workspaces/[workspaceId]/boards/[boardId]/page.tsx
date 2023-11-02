@@ -3,7 +3,7 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 
-export default function Board() {
+export default function Board({ params }: { params: { boardId: string } }) {
   const handleDelete = () => {
     console.log("Deleted board");
   };
