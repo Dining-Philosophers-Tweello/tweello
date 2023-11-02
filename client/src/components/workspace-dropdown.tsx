@@ -13,6 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -108,6 +109,18 @@ export default function WorkspaceDropdown() {
           <p className="text-xl">Workspaces</p>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem
+            onClick={() => {
+              router.push("/home");
+              setOpen(false);
+            }}
+          >
+            Home
+          </DropdownMenuItem>
+          <DialogTrigger asChild>
+            <DropdownMenuItem>Create New Workspace</DropdownMenuItem>
+          </DialogTrigger>
+          {workspaces.length > 0 && <DropdownMenuSeparator />}
           {workspaces.map((workspace) => {
             return (
               <Link href={`/workspaces/${workspace.id}`} key={workspace.id}>
@@ -117,9 +130,6 @@ export default function WorkspaceDropdown() {
               </Link>
             );
           })}
-          <DialogTrigger asChild>
-            <DropdownMenuItem>Create New Workspace</DropdownMenuItem>
-          </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>
