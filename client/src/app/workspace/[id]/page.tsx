@@ -8,50 +8,6 @@ import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface BoardCardData {
-  link: string;
-  title: string;
-  description: string;
-}
-
-const boardsData: BoardCardData[] = [
-  {
-    link: "/board",
-    title: "Project A",
-    description:
-      "Ut enim ad minim veniam, exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    link: "/board",
-    title: "Project B",
-    description:
-      "Lorem ipsum dolor sit amet, ut labore et dolore magna aliqua.",
-  },
-  {
-    link: "/board",
-    title: "Project C",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisci, sed do eiusmod tempor incididunt ut.",
-  },
-  {
-    link: "/board",
-    title: "Project D",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    link: "/board",
-    title: "Project E",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exerci nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    link: "/board",
-    title: "Project F",
-    description: "Lorem ipsum dolor sit amet.",
-  },
-];
-
 interface Workspace {
   _id: string;
   name: string;
@@ -135,14 +91,24 @@ export default function WorkspacePage({ params }: { params: { id: string } }) {
           />
         </div>
         <div className="flex gap-5 flex-wrap">
-          {boardsData.map((board) => (
-            <BoardCard
-              key={board.title}
-              link={board.link}
-              title={board.title}
-              description={board.description}
-            />
-          ))}
+          {workspace.boards.length === 0 ? (
+            <div className="flex items-center justify-center w-screen h-[calc(100vh-200px)]">
+              <div className="text-2xl text-gray-400">
+                There are no boards in this workspace
+              </div>
+            </div>
+          ) : (
+            <>
+              {workspace.boards.map((board) => (
+                <BoardCard
+                  key={board["_id"]}
+                  link={`/board/${board["_id"]}`} // TODO: Will be changed in TWEEL-127
+                  title={board["name"]}
+                  description={board["description"]}
+                />
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
