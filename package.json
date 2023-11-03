@@ -4,6 +4,8 @@
   "description": "## Project Description",
   "main": "index.js",
   "scripts": {
+    "format": "concurrently \"cd server && prettier . --write\" \"cd client && prettier . --write\"",
+    "i-all": "concurrently \"cd server && npm i\" \"cd client && npm i\"",
     "start": "concurrently \"cd server && npm run server\" \"cd client && npm run dev\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
