@@ -1,5 +1,12 @@
 import express from "express";
 import {
+  createColumn,
+  deleteColumn,
+  editColumn,
+  getColumn,
+  getColumns,
+} from "../controllers/columnController.js"
+import {
   createBoard,
   deleteBoard,
   editBoard,

@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import Workspace from "../models/workspaceModel.js";
+import { Workspace } from "../models/workspaceModel.js";
 
 // @desc    Create a new board
 // @route   POST /api/workspaces/:id/boards

@@ -60,5 +60,6 @@ const workspaceSchema = mongoose.Schema(
 );
 
 const Workspace = mongoose.model("Workspace", workspaceSchema);
+const Board = mongoose.model("Board", boardSchema);
 
-export default Workspace;
+export { Workspace, Board };
