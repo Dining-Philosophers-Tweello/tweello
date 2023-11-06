@@ -1,5 +1,12 @@
 import express from "express";
 import {
+  createColumn,
+  deleteColumn,
+  editColumn,
+  getColumn,
+  getColumns,
+} from "../controllers/columnController.js"
+import {
   createBoard,
   deleteBoard,
   editBoard,
@@ -34,5 +41,16 @@ router
   .put(protect, editBoard)
   .delete(protect, deleteBoard)
   .get(protect, getBoard);
+
+// Column Routes
+router
+  .route("/:workspaceId/boards/:boardId/columns")
+  .get(protect, getColumns)
+  .post(protect, createColumn);
+router
+  .route("/:workspaceId/boards/:boardId/columns/:columnId")
+  .put(protect, editColumn)
+  .delete(protect, deleteColumn)
+  .get(protect, getColumn);
 
 export default router;
