@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { Workspace, Board } from "../models/workspaceModel.js";
+import Workspace from "../models/workspaceModel.js";
 
 // @desc    Create a new column
 // @route   POST /api/workspaces/:workspaceId/boards/:boardId/columns
@@ -15,6 +15,11 @@ const createColumn = asyncHandler(async (request, response) => {
   try {
     workspace = await Workspace.findById(workspaceId);
   } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
+  if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
   }
