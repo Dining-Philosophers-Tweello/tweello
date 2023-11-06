@@ -8,15 +8,74 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Textarea } from "./ui/textarea";
 
-export default function EditBoardDialog() {
-  const handleEdit = () => {
-    console.log("Edited board");
+const formSchema = z.object({
+  name: z.string().min(1),
+  description: z.string(),
+});
+
+export default function EditBoardDialog({
+  boardName,
+  boardDescription,
+  params,
+}: {
+  boardName: string;
+  boardDescription: string;
+  params: { workspaceId: string; boardId: string };
+}) {
+  const [open, setOpen] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: boardName,
+      description: boardDescription,
+    },
+  });
+
+  const handleEdit = (values: z.infer<typeof formSchema>) => {
+    const jwt = localStorage.getItem("jwt");
+    const requestOptions = {
+      method: "PUT",
+      body: JSON.stringify(values),
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
+      requestOptions,
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching board:", error);
+      });
   };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Edit Board</Button>
       </DialogTrigger>
@@ -24,37 +83,47 @@ export default function EditBoardDialog() {
         <DialogHeader>
           <DialogTitle>Edit Board</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid  items-center gap-4">
-            <Input
-              id="board-name"
-              name="board-name"
-              type="text"
-              autoCapitalize="none"
-              autoCorrect="off"
-              autoComplete="one-time-code"
-              className="col-span-3"
-              placeholder="Enter board name"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleEdit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter the board name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-
-            <Textarea
-              id="board-description"
-              name="board-description"
-              autoCapitalize="none"
-              autoCorrect="off"
-              className="col-span-3"
-              placeholder="Enter board description"
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter the board description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button className="mr-2" variant="secondary">
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button onClick={handleEdit}>Confirm</Button>
-        </DialogFooter>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button className="mr-2" variant="secondary">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button>Update</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

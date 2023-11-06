@@ -3,6 +3,7 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Board({
   params,
@@ -10,6 +11,12 @@ export default function Board({
   params: { workspaceId: string; boardId: string };
 }) {
   const router = useRouter();
+
+  // TODO: Use get board API to set state of board
+  const [board, setBoard] = useState({
+    name: "Board Name",
+    description: "Board Description",
+  });
 
   const handleDelete = () => {
     const jwt = localStorage.getItem("jwt");
@@ -43,7 +50,11 @@ export default function Board({
     <div className="flex flex-col gap-5 p-5 w-screen h-screen">
       <div className="flex flex-row gap-5">
         <div className="text-3xl">Insert board name here</div>
-        <EditBoardDialog />
+        <EditBoardDialog
+          boardName={board.name}
+          boardDescription={board.description}
+          params={params}
+        />
         <DeleteDialog componentName={"Board"} handleDelete={handleDelete} />
       </div>
       <div className="flex gap-5 flex-wrap">Insert Columns Here</div>
