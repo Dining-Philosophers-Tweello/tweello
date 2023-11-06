@@ -2,14 +2,8 @@
 
 import { Icons } from "@/components/icons";
 import { WorkspaceBoardCard } from "@/components/workspace-board-card";
+import { Workspace } from "@/types";
 import { useEffect, useState } from "react";
-
-interface Workspace {
-  id: string;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
-}
 
 export default function Home() {
   const [workspaces, setWorkspaces] = useState<Workspace[] | null>();
@@ -32,14 +26,7 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        setWorkspaces(
-          data.workspaces.map((workspace) => ({
-            id: workspace._id,
-            name: workspace.name,
-            updatedAt: workspace.updatedAt,
-            createdAt: workspace.createdAt,
-          })),
-        );
+        setWorkspaces(data.workspaces);
       })
       .catch((error) => {
         console.error("Error fetching workspaces:", error);
@@ -67,8 +54,8 @@ export default function Home() {
           <>
             {workspaces.map((workspace) => (
               <WorkspaceBoardCard
-                key={workspace.id}
-                link={`/workspaces/${workspace.id}`}
+                key={workspace._id}
+                link={`/workspaces/${workspace._id}`}
                 title={workspace.name}
                 updatedAt={workspace.updatedAt}
                 createdAt={workspace.createdAt}
