@@ -56,13 +56,7 @@ const getWorkspace = asyncHandler(async (request, response) => {
     throw new Error("You do not have permission to get this workspace");
   }
 
-  response.status(200).json({
-    _id: workspace._id,
-    name: workspace.name,
-    boards: workspace.boards,
-    members: workspace.members,
-    creator: workspace.creator,
-  });
+  response.status(200).json(workspace);
 });
 
 // @desc    Create a new workspace

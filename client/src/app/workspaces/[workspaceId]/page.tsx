@@ -5,24 +5,9 @@ import DeleteDialog from "@/components/delete-dialog";
 import { Icons } from "@/components/icons";
 import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
 import { WorkspaceBoardCard } from "@/components/workspace-board-card";
+import { Workspace, nullWorkspace } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-interface Workspace {
-  _id: string;
-  name: string;
-  boards: string[]; // TODO: Will be Board[] once Board integration is done
-  members: string[];
-  creator: string;
-}
-
-const nullWorkspace = {
-  _id: "-1",
-  name: "",
-  boards: [],
-  members: [],
-  creator: "",
-};
 
 export default function WorkspacePage({
   params,
@@ -125,12 +110,12 @@ export default function WorkspacePage({
               <>
                 {workspace.boards.map((board) => (
                   <WorkspaceBoardCard
-                    key={board["_id"]}
+                    key={board._id}
                     link={`/workspaces/${params.workspaceId}/boards/${board["_id"]}`}
-                    title={board["name"]}
-                    description={board["description"]}
-                    updatedAt={board["updatedAt"]}
-                    createdAt={board["createdAt"]}
+                    title={board.name}
+                    description={board.description}
+                    updatedAt={board.updatedAt}
+                    createdAt={board.createdAt}
                   />
                 ))}
               </>
