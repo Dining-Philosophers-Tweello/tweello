@@ -20,7 +20,6 @@ export interface Board {
 export interface Column {
   _id: string;
   name: string;
-  description: string;
   tasks: Task[];
   updatedAt: string;
   createdAt: string;
