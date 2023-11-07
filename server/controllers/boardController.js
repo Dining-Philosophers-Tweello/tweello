@@ -9,9 +9,15 @@ const createBoard = asyncHandler(async (request, response) => {
   const currentUserId = request.user._id;
   const workspaceId = request.params.workspaceId;
 
-  // Check if the user has access to the workspace
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -52,9 +58,15 @@ const editBoard = asyncHandler(async (request, response) => {
   const boardId = request.params.boardId;
   const currentUserId = request.user._id;
 
-  // Find the workspace
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -109,9 +121,15 @@ const deleteBoard = asyncHandler(async (request, response) => {
   const boardId = request.params.boardId;
   const currentUserId = request.user._id;
 
-  // Find the workspace
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -152,9 +170,15 @@ const getBoard = asyncHandler(async (request, response) => {
   const boardId = request.params.boardId;
   const currentUserId = request.user._id;
 
-  // Find the workspace
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -192,8 +216,15 @@ const getBoards = asyncHandler(async (request, response) => {
   const workspaceId = request.params.workspaceId;
   const currentUserId = request.user._id;
 
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");

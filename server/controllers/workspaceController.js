@@ -19,9 +19,18 @@ const getWorkspaces = asyncHandler(async (request, response) => {
 // @route   GET /api/workspaces/:id
 // @access  Private
 const getWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.workspaceId);
+  const workspaceId = request.params.workspaceId;
   const currentUserId = request.user._id;
 
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -90,10 +99,19 @@ const createWorkspace = asyncHandler(async (request, response) => {
 // @route   PUT /api/workspaces/:id
 // @access  Private
 const editWorkspace = asyncHandler(async (request, response) => {
-  const workspace = await Workspace.findById(request.params.workspaceId);
+  const workspaceId = request.params.workspaceId;
   const currentUserId = request.user._id;
   const { name, memberId } = request.body;
 
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -127,8 +145,15 @@ const deleteWorkspace = asyncHandler(async (request, response) => {
   const workspaceId = request.params.workspaceId;
   const user = request.user._id;
 
-  const workspace = await Workspace.findById(workspaceId);
-
+  // Find workspace or check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
