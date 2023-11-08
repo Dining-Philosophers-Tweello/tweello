@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { requestOptions } from "@/hooks/requestOptions";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Settings } from "lucide-react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -26,21 +27,11 @@ const ProfileSettingsDialog = () => {
   });
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch("http://localhost:8000/api/users/profile", requestOptions)
+    fetch("http://localhost:8000/api/users/profile", requestOptions("GET"))
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         return response.json();
       })
       .then((data) => {
@@ -59,42 +50,27 @@ const ProfileSettingsDialog = () => {
 
   const validateField = (name: string, value: string) => {
     let errorMessage = "";
-
     if (name === "name") {
       if (value.trim() === "") {
         errorMessage = "Name is required";
       }
     }
-
     setErrors({ ...errors, [name]: errorMessage });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     const { name } = profile;
     validateField("name", name);
-
     if (!errors.name) {
       const body = {
         ...(profile.name && { name: profile.name }),
       };
-      const jwt = localStorage.getItem("jwt");
-      const requestOptions = {
-        method: "PUT",
-        body: JSON.stringify(body),
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      };
-
       try {
         const response = await fetch(
           "http://localhost:8000/api/users/profile",
-          requestOptions,
+          requestOptions("PUT", body),
         );
-
         if (response.ok) {
           setOpen(false);
         }

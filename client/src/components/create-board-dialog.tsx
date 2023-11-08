@@ -8,12 +8,67 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { requestOptions } from "@/hooks/requestOptions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-export default function CreateBoardDialog() {
+const formSchema = z.object({
+  name: z.string().min(1),
+  description: z.string(),
+});
+
+export default function CreateBoardDialog({
+  params,
+}: {
+  params: { workspaceId: string };
+}) {
+  const [open, setOpen] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
+
+  const handleCreate = (values: z.infer<typeof formSchema>) => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards`,
+      requestOptions("POST", values),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error creating board:", error);
+      });
+    form.reset();
+  };
+
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        form.reset();
+      }}
+    >
       <DialogTrigger>
         <Button>Create New Board</Button>
       </DialogTrigger>
@@ -21,37 +76,50 @@ export default function CreateBoardDialog() {
         <DialogHeader>
           <DialogTitle>Create New Board</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid  items-center gap-4">
-            <Input
-              id="board-name"
-              name="board-name"
-              type="text"
-              autoCapitalize="none"
-              autoCorrect="off"
-              autoComplete="one-time-code"
-              className="col-span-3"
-              placeholder="Enter board name"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleCreate)}
+            className="space-y-8"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter the board name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-
-            <Textarea
-              id="board-description"
-              name="board-description"
-              autoCapitalize="none"
-              autoCorrect="off"
-              className="col-span-3"
-              placeholder="Enter board description"
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter the board description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button className="mr-2" variant="secondary">
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button>Create</Button>
-        </DialogFooter>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button className="mr-2" variant="secondary">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button>Create</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -3,6 +3,7 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 import { Icons } from "@/components/icons";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Board, nullBoard } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,18 +18,9 @@ export default function Board({
   const [board, setBoard] = useState<Board | null>();
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions,
+      requestOptions("GET"),
     )
       .then((response) => {
         if (!response.ok) {
@@ -46,17 +38,9 @@ export default function Board({
   });
 
   const handleDelete = () => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    };
-
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions,
+      requestOptions("DELETE"),
     )
       .then((response) => {
         if (!response.ok) {
@@ -90,7 +74,7 @@ export default function Board({
       ) : (
         <div className="flex flex-col gap-5 p-5 w-screen h-screen">
           <div className="flex flex-row gap-5">
-            <div className="text-3xl">{board.name}</div>
+            <div className="text-4xl font-bold">{board.name}</div>
             <EditBoardDialog
               boardName={board.name}
               boardDescription={board.description}

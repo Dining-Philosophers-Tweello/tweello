@@ -1,7 +1,9 @@
 "use client";
 
+import CreateWorkspaceDialog from "@/components/create-workspace-dialog";
 import { Icons } from "@/components/icons";
 import { WorkspaceBoardCard } from "@/components/workspace-board-card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Workspace } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -9,16 +11,7 @@ export default function Home() {
   const [workspaces, setWorkspaces] = useState<Workspace[] | null>();
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch("http://localhost:8000/api/workspaces", requestOptions)
+    fetch("http://localhost:8000/api/workspaces", requestOptions("GET"))
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -52,15 +45,21 @@ export default function Home() {
           </div>
         ) : (
           <>
-            {workspaces.map((workspace) => (
-              <WorkspaceBoardCard
-                key={workspace._id}
-                link={`/workspaces/${workspace._id}`}
-                title={workspace.name}
-                updatedAt={workspace.updatedAt}
-                createdAt={workspace.createdAt}
-              />
-            ))}
+            <div className="flex flex-row gap-3">
+              <div className="text-4xl font-bold">Your Workspaces</div>
+              <CreateWorkspaceDialog />
+            </div>
+            <div className="flex flex-row w-screen h-fit flex-wrap gap-5">
+              {workspaces.map((workspace) => (
+                <WorkspaceBoardCard
+                  key={workspace._id}
+                  link={`/workspaces/${workspace._id}`}
+                  title={workspace.name}
+                  updatedAt={workspace.updatedAt}
+                  createdAt={workspace.createdAt}
+                />
+              ))}
+            </div>
           </>
         )}
       </div>
