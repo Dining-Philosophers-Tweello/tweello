@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { requestOptions } from "@/hooks/requestOptions";
 import { signOut } from "next-auth/react";
 
 const ProfileDialog = () => {
@@ -25,21 +26,11 @@ const ProfileDialog = () => {
   };
 
   const handleSubmit = async () => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
       const response = await fetch(
         "http://localhost:8000/api/users/profile",
-        requestOptions,
+        requestOptions("DELETE"),
       );
-
       if (response.ok) {
         await handleSignout();
       }

@@ -5,6 +5,7 @@ import DeleteDialog from "@/components/delete-dialog";
 import { Icons } from "@/components/icons";
 import ShareWorkspaceDialog from "@/components/share-workspace-dialog";
 import { WorkspaceBoardCard } from "@/components/workspace-board-card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Workspace, nullWorkspace } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,18 +19,9 @@ export default function WorkspacePage({
   const router = useRouter();
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}`,
-      requestOptions,
+      requestOptions("GET"),
     )
       .then((response) => {
         if (!response.ok) {
@@ -44,26 +36,17 @@ export default function WorkspacePage({
         setWorkspace(nullWorkspace);
         console.error("Error fetching workspaces:", error);
       });
-  }, []);
+  });
 
   const handleDelete = () => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    };
-
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}`,
-      requestOptions,
+      requestOptions("DELETE"),
     )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         return response.json();
       })
       .then(() => {
@@ -91,8 +74,8 @@ export default function WorkspacePage({
       ) : (
         <div className="flex flex-col gap-5 p-5 w-screen h-screen">
           <div className="flex flex-row gap-5">
-            <div className="text-3xl">{workspace.name}</div>
-            <CreateBoardDialog />
+            <div className="text-4xl font-bold">{workspace.name}</div>
+            <CreateBoardDialog params={params} />
             <ShareWorkspaceDialog workspaceId={params.workspaceId} />
             <DeleteDialog
               componentName={"Workspace"}

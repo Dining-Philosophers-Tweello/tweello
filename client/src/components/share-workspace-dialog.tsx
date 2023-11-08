@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { requestOptions } from "@/hooks/requestOptions";
 import { useEffect, useState } from "react";
 
 const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
@@ -22,23 +23,30 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [sharedUsers, setSharedUsers] = useState([]);
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch("http://localhost:8000/api/users", requestOptions)
+    fetch(
+      `http://localhost:8000/api/workspaces/${workspaceId}`,
+      requestOptions("GET"),
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
+        return response.json();
+      })
+      .then((data) => {
+        setSharedUsers(data.members);
+      })
+      .catch((error) => {
+        console.error("Error fetching workspace:", error);
+      });
+    fetch("http://localhost:8000/api/users", requestOptions("GET"))
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
         return response.json();
       })
       .then((data) => {
@@ -47,13 +55,11 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
       .catch((error) => {
         console.error("Error fetching users:", error);
       });
-
-    fetch("http://localhost:8000/api/users/profile", requestOptions)
+    fetch("http://localhost:8000/api/users/profile", requestOptions("GET"))
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         return response.json();
       })
       .then((data) => {
@@ -74,28 +80,12 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
   };
 
   const handleSubmit = async () => {
-    const body = {
-      memberId: selectedUser,
-    };
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "PUT",
-      body: JSON.stringify(body),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
       const response = await fetch(
         `http://localhost:8000/api/workspaces/${workspaceId}`,
-        requestOptions,
+        requestOptions("PUT", { memberId: selectedUser }),
       );
-
-      if (response.ok) {
-        setOpen(false);
-      }
+      setSharedUsers([...sharedUsers, selectedUser]);
     } catch (error) {
       console.error(error);
     }
@@ -112,7 +102,22 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
         <DialogHeader>
           <DialogTitle>Share Workspace</DialogTitle>
           <div className="text-sm text-muted-foreground pt-[20px]">
-            <p className="pb-[5px]">Share with</p>
+            {sharedUsers.length > 0 && (
+              <div className="flex flex-col">
+                <div className="py-1">Already shared with:</div>
+                <div className="flex flex-row gap-2 flex-wrap">
+                  {sharedUsers.map((user) => (
+                    <div
+                      className="bg-blue-100 rounded-xl px-2 py-1"
+                      key={user}
+                    >
+                      {users.find((u) => u._id === user).email}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            <p className="py-2">Share with</p>
             <Select onValueChange={handleValueChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Select an email" />
@@ -120,6 +125,7 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
               <SelectContent>
                 {users
                   .filter((user) => user._id !== currentUserId)
+                  .filter((user) => !sharedUsers.includes(user._id))
                   .map((user) => (
                     <SelectItem key={user._id} value={user._id}>
                       {user.email}
@@ -139,7 +145,10 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
             className="w-1/2 mr-2"
             type="submit"
             disabled={!selectedUser}
-            onClick={handleSubmit}
+            onClick={() => {
+              handleSubmit();
+              setOpen(false);
+            }}
           >
             Share
           </Button>

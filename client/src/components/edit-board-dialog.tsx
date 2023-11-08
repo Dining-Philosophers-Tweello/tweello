@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { requestOptions } from "@/hooks/requestOptions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -38,44 +39,50 @@ export default function EditBoardDialog({
   params: { workspaceId: string; boardId: string };
 }) {
   const [open, setOpen] = useState(false);
+  const [boardInfo, setBoardInfo] = useState({
+    name: boardName,
+    description: boardDescription,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: boardName,
-      description: boardDescription,
+      name: boardInfo.name,
+      description: boardInfo.description,
     },
   });
 
   const handleEdit = (values: z.infer<typeof formSchema>) => {
-    const jwt = localStorage.getItem("jwt");
-    const requestOptions = {
-      method: "PUT",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions,
+      requestOptions("PUT", values),
     )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         setOpen(false);
       })
       .catch((error) => {
         console.error("Error fetching board:", error);
       });
+    setBoardInfo({
+      name: values.name,
+      description: values.description,
+    });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        form.reset({
+          name: boardInfo.name,
+          description: boardInfo.description,
+        });
+      }}
+    >
       <DialogTrigger asChild>
         <Button>Edit Board</Button>
       </DialogTrigger>

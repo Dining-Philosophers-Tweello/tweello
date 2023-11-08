@@ -39,15 +39,19 @@ export const WorkspaceBoardCard = ({
       <div className="flex flex-col gap-3">
         <div className="text-xl">{title}</div>
         <div className="font-light text-gray-500">{displayDesc}</div>
-        {updatedAtDate && createdAtDate && (
-          <div className="font-light text-sm text-gray-500">
-            <div>Last updated {updatedAtDate.fromNow()} </div>
-            <div>Created {createdAtDate.fromNow()} </div>
+        <div className="flex flex-row items-end justify-between">
+          <div>
+            {updatedAtDate && createdAtDate && (
+              <div className="font-light text-sm text-gray-500">
+                <div>Last updated {updatedAtDate.fromNow()} </div>
+                <div>Created {createdAtDate.fromNow()} </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="flex justify-end">
-        <ArrowRight className="text-gray-400" size={24} />
+          <div className="flex justify-end">
+            <ArrowRight className="text-gray-400" size={24} />
+          </div>
+        </div>
       </div>
     </Link>
   );
