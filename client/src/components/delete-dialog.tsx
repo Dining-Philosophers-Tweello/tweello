@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Trash2 } from "lucide-react";
 
 const DeleteDialog = ({
   componentName,
@@ -20,9 +21,9 @@ const DeleteDialog = ({
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-700	 text-primary-foreground hover:bg-red-800 h-10 px-4 py-2">
-          {`Delete ${componentName}`}
-        </div>
+        <Button variant="destructive" size="icon">
+          <Trash2 />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
