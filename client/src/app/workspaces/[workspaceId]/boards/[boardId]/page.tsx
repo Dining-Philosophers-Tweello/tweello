@@ -57,6 +57,10 @@ export default function Board({
       });
   };
 
+  const handleColumnDelete = () => {
+    console.log("Deleted column");
+  };
+
   if (!board) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
@@ -83,7 +87,13 @@ export default function Board({
             <DeleteDialog componentName={"Board"} handleDelete={handleDelete} />
           </div>
           <div className="font-light text-gray-500">{board.description}</div>
-          <div className="flex gap-5 flex-wrap">Insert Columns Here</div>
+          <div className="flex gap-5 flex-wrap">
+            Insert Columns Here
+            <DeleteDialog
+              componentName={"Column"}
+              handleDelete={handleColumnDelete}
+            />
+          </div>
         </div>
       )}
     </div>
