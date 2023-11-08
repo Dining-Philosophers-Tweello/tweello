@@ -1,18 +1,18 @@
 import express from "express";
 import {
-  createColumn,
-  deleteColumn,
-  editColumn,
-  getColumn,
-  getColumns,
-} from "../controllers/columnController.js"
-import {
   createBoard,
   deleteBoard,
   editBoard,
   getBoard,
   getBoards,
 } from "../controllers/boardController.js";
+import {
+  createColumn,
+  deleteColumn,
+  editColumn,
+  getColumn,
+  getColumns,
+} from "../controllers/columnController.js";
 import {
   createWorkspace,
   deleteWorkspace,
