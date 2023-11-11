@@ -104,14 +104,17 @@ const ShareWorkspaceDialog = ({ workspaceId }: { workspaceId: string }) => {
               <div className="flex flex-col">
                 <div className="py-1">Already shared with:</div>
                 <div className="flex flex-row gap-2 flex-wrap">
-                  {sharedUsers.map((user) => (
-                    <div
-                      className="bg-blue-100 rounded-xl px-2 py-1"
-                      key={user}
-                    >
-                      {users.find((u) => u._id === user).email}
-                    </div>
-                  ))}
+                  {sharedUsers.map((user) => {
+                    const foundUser = users.find((u) => u._id === user);
+                    return (
+                      <div
+                        className="bg-blue-100 rounded-xl px-2 py-1"
+                        key={user}
+                      >
+                        {foundUser ? foundUser.email : "Loading..."}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
