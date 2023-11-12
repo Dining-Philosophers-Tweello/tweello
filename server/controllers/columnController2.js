@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import Workspace from "../models/workspaceModel.js";
+import { Workspace, Board } from "../models/workspaceModel.js";
 
 // @desc    Create a new column
 // @route   POST /api/workspaces/:workspaceId/boards/:boardId/columns
@@ -18,13 +18,7 @@ const createColumn = asyncHandler(async (request, response) => {
     response.status(404);
     throw new Error("Workspace not found");
   }
-  // Check against old deleted workspace IDs
-  if (!workspace) {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
 
-  // Check if the user has access to the workspace
   if (
     workspace.creator.toString() !== currentUserId.toString() &&
     !workspace.members.includes(currentUserId)
@@ -70,15 +64,10 @@ const editColumn = asyncHandler(async (request, response) => {
   const columnId = request.params.columnId;
   const currentUserId = request.user._id;
 
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+
   // Check if the workspace exists
-  let workspace;
-  try {
-    workspace = await Workspace.findById(workspaceId);
-  } catch (error) {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
-  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -124,8 +113,8 @@ const editColumn = asyncHandler(async (request, response) => {
   // Update the column's information
   columnToEdit.name = name || columnToEdit.name;
 
-  // Must save the parent doc, not the subdoc!
-  const updatedWorkspce = await workspace.save();
+  // Save the updated board
+  const updatedBoard = await board.save();
 
   response.status(200).json({
     _id: columnToEdit._id,
@@ -133,29 +122,21 @@ const editColumn = asyncHandler(async (request, response) => {
   });
 });
 
+
 // @desc    Delete a column
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId
 // @access  Private
-const deleteColumn = asyncHandler(async (request, response) => {});
-
-// @desc    Get a board's column
-// @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId
-// @access  Private
-const getColumn = asyncHandler(async (request, response) => {
-  const currentUserId = request.user._id;
+const deleteColumn = asyncHandler(async (request, response) => {
+  const { name } = request.body;
   const workspaceId = request.params.workspaceId;
   const boardId = request.params.boardId;
   const columnId = request.params.columnId;
+  const currentUserId = request.user._id;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
 
   // Check if the workspace exists
-  let workspace;
-  try {
-    workspace = await Workspace.findById(workspaceId);
-  } catch (error) {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
-  // Check against old deleted workspace IDs
   if (!workspace) {
     response.status(404);
     throw new Error("Workspace not found");
@@ -179,65 +160,37 @@ const getColumn = asyncHandler(async (request, response) => {
     throw new Error("Board not found");
   }
 
-  // Find the column
-  const column = board.columns.id(columnId);
+  // Find the column to delete
+  const columnToDelete = board.columns.id(columnId);
 
   // Check if the column exists
-  if (!column) {
+  if (!columnToDelete) {
     response.status(404);
     throw new Error("Column not found");
   }
 
-  response.status(200).json({
-    _id: column._id,
-    name: column.name,
-    tasks: column.tasks,
-  });
+  // Delete the column using the _id of the column
+  await Board.updateOne(
+    { _id: boardId },
+    { $pull: { columns: { _id: columnId } } },
+  );
+
+  // Save the updated board without the deleted column
+  response.status(200).json({ message: "Column deleted successfully" });
+});
+
+// @desc    Get a board's column
+// @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId
+// @access  Private
+const getColumn = asyncHandler(async (request, response) => {
+
 });
 
 // @desc    Get a board's columns
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns
 // @access  Private
 const getColumns = asyncHandler(async (request, response) => {
-  const currentUserId = request.user._id;
-  const workspaceId = request.params.workspaceId;
-  const boardId = request.params.boardId;
 
-  // Check if the workspace exists
-  let workspace;
-  try {
-    workspace = await Workspace.findById(workspaceId);
-  } catch (error) {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
-  // Check against old deleted workspace IDs
-  if (!workspace) {
-    response.status(404);
-    throw new Error("Workspace not found");
-  }
-
-  // Check if the user has access to the workspace
-  if (
-    workspace.creator.toString() !== currentUserId.toString() &&
-    !workspace.members.includes(currentUserId)
-  ) {
-    response.status(403);
-    throw new Error("Unauthorized access to this workspace");
-  }
-
-  // Find the board
-  const board = workspace.boards.id(boardId);
-
-  // Check if the board exists
-  if (!board) {
-    response.status(404);
-    throw new Error("Board not found");
-  }
-
-  response.status(200).json({
-    columns: board.columns,
-  });
 });
 
-export { createColumn, deleteColumn, editColumn, getColumn, getColumns };
+export { createColumn, editColumn, deleteColumn, getColumn, getColumns };
