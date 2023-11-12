@@ -73,11 +73,11 @@ export default function Board({
   return (
     <div>
       {board === nullBoard ? (
-        <div className="flex items-center justify-center w-screen h-screen">
+        <div className="flex items-center justify-center w-screen ">
           <div className="text-2xl text-gray-400">Board not found</div>
         </div>
       ) : (
-        <div className="flex flex-col gap-5 p-5 w-screen h-screen">
+        <div className="flex flex-col gap-5 p-5 w-screen  ">
           <div className="flex flex-row gap-5">
             <div className="text-4xl font-bold">{board.name}</div>
             <EditBoardDialog
