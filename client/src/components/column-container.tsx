@@ -17,9 +17,10 @@ interface Props {
   column: Column;
   deleteColumn: (id: string) => void;
   updateColumn: (id: string, name: string) => void;
+
   createTask: (columnId: string) => void;
-  deleteTask: (id: string) => void;
   updateTask: (id: string, content: string) => void;
+  deleteTask: (id: string) => void;
   tasks: Task[];
 }
 function ColumnContainer(props: Props) {
@@ -33,6 +34,11 @@ function ColumnContainer(props: Props) {
     updateTask,
   } = props;
 
+  const [editMode, setEditMode] = useState(false);
+
+  const tasksIds = useMemo(() => {
+    return tasks.map((task) => task._id);
+  }, [tasks]);
   const {
     setNodeRef,
     attributes,
@@ -46,6 +52,7 @@ function ColumnContainer(props: Props) {
       type: "column",
       column,
     },
+    disabled: editMode,
   });
   const style = {
     transition,
@@ -53,13 +60,13 @@ function ColumnContainer(props: Props) {
   };
   if (isDragging) {
     return (
-      <div className="w-80 min-h-[25rem] bg-secondary border-2 border-primary opacity-40"></div>
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="w-80 min-h-[25rem] bg-secondary border-2 border-primary opacity-40"
+      ></div>
     );
   }
-  const [editMode, setEditMode] = useState(false);
-  const tasksIds = useMemo(() => {
-    return tasks.map((task) => task._id);
-  }, [tasks]);
   return (
     <Card
       className="w-80 min-h-[25rem] bg-secondary flex flex-col"

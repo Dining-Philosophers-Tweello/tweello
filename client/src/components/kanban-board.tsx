@@ -28,7 +28,7 @@ export default function KanbanBoard() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 3,
+        distance: 10,
       },
     }),
   );
@@ -38,9 +38,9 @@ export default function KanbanBoard() {
     <>
       <div className="overflow-x-auto flex gap-2">
         <DndContext
+          sensors={sensors}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
-          sensors={sensors}
           onDragOver={onDragOver}
         >
           <div className="flex gap-2">
@@ -164,6 +164,10 @@ export default function KanbanBoard() {
     const overColumnId = over.id;
 
     if (activeColumnId === overColumnId) return;
+
+    const isActiveAColumn = active.data.current?.type === "column";
+    if (!isActiveAColumn) return;
+
     setColumns((columns) => {
       const activeColumnIndex = columns.findIndex(
         (column) => column._id === activeColumnId,
@@ -197,12 +201,18 @@ export default function KanbanBoard() {
           (task) => task._id === activeId,
         );
         const overTaskIndex = tasks.findIndex((task) => task._id === overId);
-        tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId;
+
+        if (tasks[activeTaskIndex].columnId != tasks[overTaskIndex].columnId) {
+          tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId;
+          return arrayMove(tasks, activeTaskIndex, overTaskIndex - 1);
+        }
 
         return arrayMove(tasks, activeTaskIndex, overTaskIndex);
       });
     }
+
     const isOverAColumn = over.data.current?.type === "column";
+
     // dropping a task over a column
     if (isActiveTask && isOverAColumn) {
       setTasks((tasks) => {
