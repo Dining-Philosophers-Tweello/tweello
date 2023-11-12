@@ -76,7 +76,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
             onChange={(e) => {
               updateTask(task._id, e.target.value);
             }}
-          ></textarea>
+          />
         </CardTitle>
       </Card>
     );
