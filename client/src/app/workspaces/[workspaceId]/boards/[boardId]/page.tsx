@@ -3,6 +3,7 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 import { Icons } from "@/components/icons";
+import Column from "@/components/kanban-board";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Board, nullBoard } from "@/types";
 import { useRouter } from "next/navigation";
@@ -35,7 +36,7 @@ export default function Board({
         setBoard(nullBoard);
         console.error("Error fetching board:", error);
       });
-  });
+  }, []);
 
   const handleDelete = () => {
     fetch(
@@ -72,11 +73,11 @@ export default function Board({
   return (
     <div>
       {board === nullBoard ? (
-        <div className="flex items-center justify-center w-screen h-screen">
+        <div className="flex items-center justify-center w-screen ">
           <div className="text-2xl text-gray-400">Board not found</div>
         </div>
       ) : (
-        <div className="flex flex-col gap-5 p-5 w-screen h-screen">
+        <div className="flex flex-col gap-5 p-5 w-screen  ">
           <div className="flex flex-row gap-5">
             <div className="text-4xl font-bold">{board.name}</div>
             <EditBoardDialog
@@ -87,12 +88,12 @@ export default function Board({
             <DeleteDialog componentName={"Board"} handleDelete={handleDelete} />
           </div>
           <div className="font-light text-gray-500">{board.description}</div>
-          <div className="flex gap-5 flex-wrap">
-            Insert Columns Here
-            <DeleteDialog
-              componentName={"Column"}
-              handleDelete={handleColumnDelete}
-            />
+          <div className="flex gap-5">
+            <Column />
+            {/*<DeleteDialog*/}
+            {/*  componentName={"Column"}*/}
+            {/*  handleDelete={handleColumnDelete}*/}
+            {/*/>*/}
           </div>
         </div>
       )}

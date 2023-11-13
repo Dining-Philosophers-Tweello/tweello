@@ -25,7 +25,11 @@ export interface Column {
   createdAt: string;
 }
 
-export interface Task {}
+export interface Task {
+  _id: string;
+  columnId: string;
+  content: string;
+}
 
 export const nullWorkspace = {
   _id: "-1",

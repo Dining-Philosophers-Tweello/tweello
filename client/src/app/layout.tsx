@@ -1,5 +1,5 @@
-import SessionProvider from "@/components/SessionProvider";
 import Navbar from "@/components/navbar";
+import SessionProvider from "@/components/sessionprovider";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
