@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,18 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { Trash2 } from "lucide-react";
 
+interface DeleteDialogProps extends ButtonProps {
+  componentName: string;
+  handleDelete: () => void;
+}
 const DeleteDialog = ({
   componentName,
   handleDelete,
-}: {
-  componentName: string;
-  handleDelete: () => void;
-}) => {
+  variant = "destructive",
+  className,
+  size = "icon",
+  color,
+}: DeleteDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="destructive" size="icon">
-          <Trash2 />
+        <Button variant={variant} className={className} size={size}>
+          <Trash2 color={color} size={24} />
         </Button>
       </DialogTrigger>
       <DialogContent>

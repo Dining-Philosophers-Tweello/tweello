@@ -1,3 +1,4 @@
+import DeleteDialog from "@/components/delete-dialog";
 import TaskCard from "@/components/task-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Column, Task } from "@/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { PlusIcon, Trash2 } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 interface Props {
@@ -39,49 +39,26 @@ function ColumnContainer(props: Props) {
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task._id);
   }, [tasks]);
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: column._id,
-    data: {
-      type: "column",
-      column,
-    },
-    disabled: editMode,
-  });
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  };
-  if (isDragging) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="w-80 min-h-[25rem] bg-secondary border-2 border-primary opacity-40"
-      ></div>
-    );
-  }
+  const { setNodeRef, attributes, listeners, transform, transition } =
+    useSortable({
+      id: column._id,
+      data: {
+        type: "column",
+        column,
+      },
+      disabled: editMode,
+    });
+
   return (
     <Card
       className="w-80 min-h-[25rem] bg-secondary flex flex-col"
       ref={setNodeRef}
-      style={style}
     >
       <div className="flex flex-col ">
         {/*Header*/}
-        <CardHeader
-          className=" flex flex-row items-center justify-between bg-card cursor-grab rounded rounded-b-none p-3 border-2 border-secondary"
-          {...attributes}
-          {...listeners}
-        >
+        <CardHeader className=" flex flex-row items-center justify-between bg-card rounded rounded-b-none p-3 border-2 border-secondary">
           <CardDescription onClick={() => setEditMode(true)}>
-            <span className="text-muted-foreground px-2 py-1 items-center justify-center">
+            <span className="text-muted-foreground text-base px-2 py-1 items-center justify-center">
               {!editMode && `${column.name}`}
               {editMode && (
                 <input
@@ -102,14 +79,14 @@ function ColumnContainer(props: Props) {
               )}
             </span>
           </CardDescription>
-          <Button
+          <DeleteDialog
+            componentName={column.name}
+            handleDelete={() => deleteColumn(column._id)}
             variant="ghost"
-            size="sm"
+            size="icon"
             className="!mt-0"
-            onClick={() => deleteColumn(column._id)}
-          >
-            <Trash2 color="grey" size={24} />
-          </Button>
+            color="grey"
+          ></DeleteDialog>
         </CardHeader>
       </div>
       {/*Content*/}
