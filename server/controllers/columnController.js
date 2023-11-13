@@ -136,7 +136,63 @@ const editColumn = asyncHandler(async (request, response) => {
 // @desc    Delete a column
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId
 // @access  Private
-const deleteColumn = asyncHandler(async (request, response) => {});
+const deleteColumn = asyncHandler(async (request, response) => {
+  const name = request.body;
+  const workspaceId = request.params.workspaceId;
+  const boardId = request.params.boardId;
+  const columnId = request.params.columnId;
+  const currentUserId = request.user._id;
+
+  // Check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
+  // Find the board
+  const board = workspace.boards.id(boardId);
+
+  // Check if the board exists
+  if (!board) {
+    response.status(404);
+    throw new Error("Board not found");
+  }
+
+  // Find the column to delete
+  const columnToDelete = board.columns.id(columnId);
+
+  // Check if the column exists
+  if (!columnToDelete) {
+    response.status(404);
+    throw new Error("Column not found");
+  }
+
+  // Delete the column using the _id of the column within a specific board
+  await Workspace.updateOne(
+    { _id: workspaceId, 'boards._id': boardId },
+    { $pull: { 'boards.$.columns': { _id: columnId } } },
+  );
+
+  // Save the updated board without the deleted column
+  response.status(200).json({ message: "Column deleted successfully" });
+});
 
 // @desc    Get a board's column
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId
