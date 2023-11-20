@@ -1,12 +1,5 @@
 import express from "express";
 import {
-  createTask,
-  deleteTask,
-  editTask,
-  getTask,
-  getTasks,
-} from "../controllers/taskController.js";
-import {
   createBoard,
   deleteBoard,
   editBoard,
@@ -20,6 +13,13 @@ import {
   getColumn,
   getColumns,
 } from "../controllers/columnController.js";
+import {
+  createTask,
+  deleteTask,
+  editTask,
+  getTask,
+  getTasks,
+} from "../controllers/taskController.js";
 import {
   createWorkspace,
   deleteWorkspace,
