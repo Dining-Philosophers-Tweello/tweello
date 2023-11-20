@@ -22,14 +22,14 @@ const deleteTask = asyncHandler(async (request, response) => {
     // To-do
 });
 
-// @desc    Get a board's task
+// @desc    Get a column's task
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId
 // @access  Private
 const getTask = asyncHandler(async (request, response) => {
     // To-do
 });
 
-// @desc    Get a board's tasks
+// @desc    Get a column's tasks
 // @route   GET /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks
 // @access  Private
 const getTasks = asyncHandler(async (request, response) => {
