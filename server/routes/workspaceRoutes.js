@@ -62,13 +62,13 @@ router
 
 // Task Routes
 router
-.route("/:workspaceId/boards/:boardId/columns/:columnId/tasks")
-.get(protect, getTasks)
-.post(protect, createTask);
+  .route("/:workspaceId/boards/:boardId/columns/:columnId/tasks")
+  .get(protect, getTasks)
+  .post(protect, createTask);
 router
-.route("/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId")
-.put(protect, editTask)
-.delete(protect, deleteTask)
-.get(protect, getTask);
+  .route("/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId")
+  .put(protect, editTask)
+  .delete(protect, deleteTask)
+  .get(protect, getTask);
 
 export default router;
