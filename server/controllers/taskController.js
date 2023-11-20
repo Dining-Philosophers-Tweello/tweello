@@ -5,7 +5,7 @@ import Workspace from "../models/workspaceModel.js";
 // @route   POST /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks
 // @access  Private
 const createTask = asyncHandler(async (request, response) => {
-    const { name } = request.body;
+    const { name, description } = request.body;
     const currentUserId = request.user._id;
     const workspaceId = request.params.workspaceId;
     const boardId = request.params.boardId;
@@ -44,12 +44,12 @@ const createTask = asyncHandler(async (request, response) => {
     }
 
     // Find the column
-    const column = workspace.columns.id(columnId);
+    const column = board.columns.id(columnId);
     
     // Check if the column exists
     if (!column) {
     response.status(404);
-    throw new Error("column not found");
+    throw new Error("Column not found");
     }
 
     // Check if a task with the same name already exists in the column
@@ -60,9 +60,9 @@ const createTask = asyncHandler(async (request, response) => {
     throw new Error("Task with this name already exists in the column");
     }
 
-    board.columns.push({ name: name });
+    column.tasks.push({ name: name, description: description });
     // Must save the parent doc, not the subdoc!
-    const updatedWorkspce = await workspace.save();
+    const updatedWorkspace = await workspace.save();
   
     response.status(201).json({
       _id: column.tasks[column.tasks.length - 1].id,
