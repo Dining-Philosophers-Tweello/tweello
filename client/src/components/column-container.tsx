@@ -8,14 +8,15 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Column, Task } from "@/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 interface Props {
+  params: { workspaceId: string; boardId: string };
   column: Column;
-  deleteColumn: (id: string) => void;
   updateColumn: (id: string, name: string) => void;
 
   createTask: (columnId: string) => void;
@@ -23,10 +24,11 @@ interface Props {
   deleteTask: (id: string) => void;
   tasks: Task[];
 }
+
 function ColumnContainer(props: Props) {
   const {
+    params,
     column,
-    deleteColumn,
     updateColumn,
     createTask,
     tasks,
@@ -48,6 +50,23 @@ function ColumnContainer(props: Props) {
       },
       disabled: editMode,
     });
+
+  const handleDelete = () => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns/${column._id}`,
+      requestOptions("DELETE"),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .catch((error) => {
+        console.error("Error deleting board:", error);
+      });
+  };
 
   return (
     <Card
@@ -80,8 +99,8 @@ function ColumnContainer(props: Props) {
             </span>
           </CardDescription>
           <DeleteDialog
-            componentName={column.name}
-            handleDelete={() => deleteColumn(column._id)}
+            componentName={"Column"}
+            handleDelete={handleDelete}
             variant="ghost"
             size="icon"
             className="!mt-0"

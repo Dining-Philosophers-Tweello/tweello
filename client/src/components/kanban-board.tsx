@@ -48,9 +48,9 @@ export default function KanbanBoard({
           <div className="flex gap-2">
             {columns.map((column) => (
               <ColumnContainer
+                params={params}
                 key={column._id}
                 column={column}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createNewTask}
                 deleteTask={deleteTask}
@@ -65,8 +65,8 @@ export default function KanbanBoard({
           <DragOverlay>
             {activeColumn && (
               <ColumnContainer
+                params={params}
                 column={activeColumn}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createNewTask}
                 deleteTask={deleteTask}
@@ -89,13 +89,6 @@ export default function KanbanBoard({
     </>
   );
 
-  function deleteColumn(id: string) {
-    const filteredColumns = columns.filter((column) => column._id !== id);
-    setColumns(filteredColumns);
-
-    const filteredTasks = tasks.filter((task) => task.columnId !== id);
-    setTasks(filteredTasks);
-  }
   function updateColumn(id: string, name: string) {
     const newColumns = columns.map((column) => {
       if (column._id !== id) return column;
