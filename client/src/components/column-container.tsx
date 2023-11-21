@@ -13,12 +13,12 @@ import { Column, Task } from "@/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import EditColumnDialog from "./edit-column-dialog";
 
 interface Props {
   params: { workspaceId: string; boardId: string };
   column: Column;
   updateColumn: (id: string, name: string) => void;
-
   createTask: (columnId: string) => void;
   updateTask: (id: string, content: string) => void;
   deleteTask: (id: string) => void;
@@ -64,7 +64,7 @@ function ColumnContainer(props: Props) {
         return response.json();
       })
       .catch((error) => {
-        console.error("Error deleting board:", error);
+        console.error("Error deleting column:", error);
       });
   };
 
@@ -98,14 +98,17 @@ function ColumnContainer(props: Props) {
               )}
             </span>
           </CardDescription>
-          <DeleteDialog
-            componentName={"Column"}
-            handleDelete={handleDelete}
-            variant="ghost"
-            size="icon"
-            className="!mt-0"
-            color="grey"
-          ></DeleteDialog>
+          <div>
+            <EditColumnDialog params={props.params} columnData={column} />
+            <DeleteDialog
+              componentName={"Column"}
+              handleDelete={handleDelete}
+              variant="ghost"
+              size="icon"
+              className="!mt-0"
+              color="grey"
+            ></DeleteDialog>
+          </div>
         </CardHeader>
       </div>
       {/*Content*/}
