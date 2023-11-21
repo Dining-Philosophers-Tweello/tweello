@@ -186,8 +186,8 @@ const deleteColumn = asyncHandler(async (request, response) => {
 
   // Delete the column using the _id of the column within a specific board
   await Workspace.updateOne(
-    { _id: workspaceId, 'boards._id': boardId },
-    { $pull: { 'boards.$.columns': { _id: columnId } } },
+    { _id: workspaceId, "boards._id": boardId },
+    { $pull: { "boards.$.columns": { _id: columnId } } },
   );
 
   // Save the updated board without the deleted column

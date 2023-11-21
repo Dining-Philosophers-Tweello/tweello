@@ -9,9 +9,11 @@ import { Board, nullBoard } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Board(
-  { params }: { params: { workspaceId: string; boardId: string } }
-) {
+export default function Board({
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
   const router = useRouter();
 
   const [board, setBoard] = useState<Board | null>();
@@ -19,7 +21,7 @@ export default function Board(
   useEffect(() => {
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions("GET")
+      requestOptions("GET"),
     )
       .then((response) => {
         if (!response.ok) {
@@ -39,7 +41,7 @@ export default function Board(
   const handleDelete = () => {
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions("DELETE")
+      requestOptions("DELETE"),
     )
       .then((response) => {
         if (!response.ok) {

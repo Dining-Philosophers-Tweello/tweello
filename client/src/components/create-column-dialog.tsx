@@ -15,9 +15,11 @@ import { requestOptions } from "@/hooks/requestOptions";
 import { Plus } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
-export default function CreateColumnDialog(
-  { params }: { params: { workspaceId: string; boardId: string } }
-) {
+export default function CreateColumnDialog({
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
   const [open, setOpen] = useState(false);
   const [newColumnName, setNewColumnName] = useState("");
 
@@ -28,7 +30,7 @@ export default function CreateColumnDialog(
   const handleCreate = () => {
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns`,
-      requestOptions("POST", { name: newColumnName })
+      requestOptions("POST", { name: newColumnName }),
     )
       .then((response) => {
         if (!response.ok) {
