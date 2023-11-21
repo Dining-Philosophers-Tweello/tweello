@@ -3,17 +3,15 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 import { Icons } from "@/components/icons";
-import Column from "@/components/kanban-board";
+import KanbanBoard from "@/components/kanban-board";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Board, nullBoard } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Board({
-  params,
-}: {
-  params: { workspaceId: string; boardId: string };
-}) {
+export default function Board(
+  { params }: { params: { workspaceId: string; boardId: string } }
+) {
   const router = useRouter();
 
   const [board, setBoard] = useState<Board | null>();
@@ -21,7 +19,7 @@ export default function Board({
   useEffect(() => {
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions("GET"),
+      requestOptions("GET")
     )
       .then((response) => {
         if (!response.ok) {
@@ -41,7 +39,7 @@ export default function Board({
   const handleDelete = () => {
     fetch(
       `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions("DELETE"),
+      requestOptions("DELETE")
     )
       .then((response) => {
         if (!response.ok) {
@@ -56,10 +54,6 @@ export default function Board({
       .catch((error) => {
         console.error("Error deleting board:", error);
       });
-  };
-
-  const handleColumnDelete = () => {
-    console.log("Deleted column");
   };
 
   if (!board) {
@@ -89,11 +83,7 @@ export default function Board({
           </div>
           <div className="font-light text-gray-500">{board.description}</div>
           <div className="flex gap-5">
-            <Column />
-            {/*<DeleteDialog*/}
-            {/*  componentName={"Column"}*/}
-            {/*  handleDelete={handleColumnDelete}*/}
-            {/*/>*/}
+            <KanbanBoard params={params} />
           </div>
         </div>
       )}

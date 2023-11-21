@@ -15,7 +15,11 @@ import {
 import { arrayMove } from "@dnd-kit/sortable";
 import { useMemo, useState } from "react";
 
-export default function KanbanBoard() {
+export default function KanbanBoard({
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
   const [columns, setColumns] = useState<Column[]>([]);
   const columnsId = useMemo(
     () => columns.map((column) => column._id),
@@ -56,7 +60,7 @@ export default function KanbanBoard() {
             ))}
           </div>
           <div>
-            <CreateColumnDialog onCreate={createNewColumn}></CreateColumnDialog>
+            <CreateColumnDialog params={params}></CreateColumnDialog>
           </div>
           <DragOverlay>
             {activeColumn && (
@@ -85,16 +89,6 @@ export default function KanbanBoard() {
     </>
   );
 
-  function createNewColumn(columnName: string) {
-    const columnToAdd: Column = {
-      createdAt: "",
-      tasks: [],
-      updatedAt: "",
-      _id: generateId(),
-      name: columnName,
-    };
-    setColumns([...columns, columnToAdd]);
-  }
   function deleteColumn(id: string) {
     const filteredColumns = columns.filter((column) => column._id !== id);
     setColumns(filteredColumns);
