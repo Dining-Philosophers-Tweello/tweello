@@ -1,6 +1,7 @@
 import ColumnContainer from "@/components/column-container";
 import CreateColumnDialog from "@/components/create-column-dialog";
 import TaskCard from "@/components/task-card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Column, Task } from "@/types";
 import {
   DndContext,
@@ -13,7 +14,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function KanbanBoard({
   params,
@@ -35,6 +36,25 @@ export default function KanbanBoard({
     }),
   );
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns`,
+      requestOptions("GET"),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setColumns(data["columns"]);
+      })
+      .catch((error) => {
+        console.error("Error fetching columns:", error);
+      });
+  });
 
   return (
     <>
