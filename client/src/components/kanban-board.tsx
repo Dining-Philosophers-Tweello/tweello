@@ -1,6 +1,7 @@
 import ColumnContainer from "@/components/column-container";
 import CreateColumnDialog from "@/components/create-column-dialog";
 import TaskCard from "@/components/task-card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Column, Task } from "@/types";
 import {
   DndContext,
@@ -13,9 +14,13 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export default function KanbanBoard() {
+export default function KanbanBoard({
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
   const [columns, setColumns] = useState<Column[]>([]);
   const columnsId = useMemo(
     () => columns.map((column) => column._id),
@@ -32,6 +37,25 @@ export default function KanbanBoard() {
   );
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  useEffect(() => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns`,
+      requestOptions("GET"),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setColumns(data["columns"]);
+      })
+      .catch((error) => {
+        console.error("Error fetching columns:", error);
+      });
+  });
+
   return (
     <>
       <div className="overflow-x-auto flex gap-2">
@@ -44,9 +68,9 @@ export default function KanbanBoard() {
           <div className="flex gap-2">
             {columns.map((column) => (
               <ColumnContainer
+                params={params}
                 key={column._id}
                 column={column}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createNewTask}
                 deleteTask={deleteTask}
@@ -56,13 +80,13 @@ export default function KanbanBoard() {
             ))}
           </div>
           <div>
-            <CreateColumnDialog onCreate={createNewColumn}></CreateColumnDialog>
+            <CreateColumnDialog params={params}></CreateColumnDialog>
           </div>
           <DragOverlay>
             {activeColumn && (
               <ColumnContainer
+                params={params}
                 column={activeColumn}
-                deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createNewTask}
                 deleteTask={deleteTask}
@@ -85,23 +109,6 @@ export default function KanbanBoard() {
     </>
   );
 
-  function createNewColumn(columnName: string) {
-    const columnToAdd: Column = {
-      createdAt: "",
-      tasks: [],
-      updatedAt: "",
-      _id: generateId(),
-      name: columnName,
-    };
-    setColumns([...columns, columnToAdd]);
-  }
-  function deleteColumn(id: string) {
-    const filteredColumns = columns.filter((column) => column._id !== id);
-    setColumns(filteredColumns);
-
-    const filteredTasks = tasks.filter((task) => task.columnId !== id);
-    setTasks(filteredTasks);
-  }
   function updateColumn(id: string, name: string) {
     const newColumns = columns.map((column) => {
       if (column._id !== id) return column;

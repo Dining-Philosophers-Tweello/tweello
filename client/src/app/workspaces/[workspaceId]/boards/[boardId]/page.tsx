@@ -3,7 +3,7 @@
 import DeleteDialog from "@/components/delete-dialog";
 import EditBoardDialog from "@/components/edit-board-dialog";
 import { Icons } from "@/components/icons";
-import Column from "@/components/kanban-board";
+import KanbanBoard from "@/components/kanban-board";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Board, nullBoard } from "@/types";
 import { useRouter } from "next/navigation";
@@ -58,10 +58,6 @@ export default function Board({
       });
   };
 
-  const handleColumnDelete = () => {
-    console.log("Deleted column");
-  };
-
   if (!board) {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
@@ -89,11 +85,7 @@ export default function Board({
           </div>
           <div className="font-light text-gray-500">{board.description}</div>
           <div className="flex gap-5">
-            <Column />
-            {/*<DeleteDialog*/}
-            {/*  componentName={"Column"}*/}
-            {/*  handleDelete={handleColumnDelete}*/}
-            {/*/>*/}
+            <KanbanBoard params={params} />
           </div>
         </div>
       )}

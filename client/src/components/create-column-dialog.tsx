@@ -11,24 +11,36 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, ReactNode, useState } from "react";
-
-type CreateColumnDialogProps = {
-  onCreate: (columnName: string) => void;
-  children?: ReactNode; // Add this line to accept children
-};
+import { ChangeEvent, useState } from "react";
 
 export default function CreateColumnDialog({
-  onCreate,
-}: CreateColumnDialogProps) {
+  params,
+}: {
+  params: { workspaceId: string; boardId: string };
+}) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
   const [newColumnName, setNewColumnName] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewColumnName(e.target.value);
+  };
+
+  const handleCreate = () => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns`,
+      requestOptions("POST", { name: newColumnName }),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error creating board:", error);
+      });
   };
 
   return (
@@ -50,7 +62,7 @@ export default function CreateColumnDialog({
           onSubmit={(e) => {
             e.preventDefault();
             setOpen(false);
-            onCreate(newColumnName);
+            handleCreate();
           }}
         >
           <DialogHeader>
