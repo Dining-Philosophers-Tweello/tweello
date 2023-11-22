@@ -14,6 +14,13 @@ import {
   getColumns,
 } from "../controllers/columnController.js";
 import {
+  createTask,
+  deleteTask,
+  editTask,
+  getTask,
+  getTasks,
+} from "../controllers/taskController.js";
+import {
   createWorkspace,
   deleteWorkspace,
   editWorkspace,
@@ -52,5 +59,16 @@ router
   .put(protect, editColumn)
   .delete(protect, deleteColumn)
   .get(protect, getColumn);
+
+// Task Routes
+router
+  .route("/:workspaceId/boards/:boardId/columns/:columnId/tasks")
+  .get(protect, getTasks)
+  .post(protect, createTask);
+router
+  .route("/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId")
+  .put(protect, editTask)
+  .delete(protect, deleteTask)
+  .get(protect, getTask);
 
 export default router;
