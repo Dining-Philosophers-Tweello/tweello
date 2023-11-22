@@ -52,14 +52,6 @@ const createTask = asyncHandler(async (request, response) => {
     throw new Error("Column not found");
   }
 
-  // Check if a task with the same name already exists in the column
-  const taskExists = column.tasks.find((task) => task.name === name);
-
-  if (taskExists) {
-    response.status(400);
-    throw new Error("Task with this name already exists in the column");
-  }
-
   column.tasks.push({ name: name, description: description });
   // Must save the parent doc, not the subdoc!
   const updatedWorkspace = await workspace.save();
