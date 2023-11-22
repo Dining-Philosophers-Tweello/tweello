@@ -130,7 +130,7 @@ const editTask = asyncHandler(async (request, response) => {
   response.status(200).json({
     _id: taskToEdit._id,
     name: taskToEdit.name,
-    description: taskToEdit.descriptionn,
+    description: taskToEdit.description,
   });
 });
 
