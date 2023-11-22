@@ -1,18 +1,16 @@
 import DeleteDialog from "@/components/delete-dialog";
 import TaskCard from "@/components/task-card";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Column, Task } from "@/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import CreateTaskDialog from "./create-task-dialog";
 import EditColumnDialog from "./edit-column-dialog";
 
 interface Props {
@@ -124,18 +122,7 @@ function ColumnContainer(props: Props) {
           ))}
         </SortableContext>
       </CardContent>
-      {/*Footer*/}
-      <CardFooter>
-        <Button
-          size="lg"
-          variant="ghost"
-          className="hover:bg-primary-foreground w-full"
-          onClick={() => createTask(column._id)}
-        >
-          <PlusIcon />
-          Add Task
-        </Button>
-      </CardFooter>
+      <CreateTaskDialog params={params} columnId={column._id} />
     </Card>
   );
 }

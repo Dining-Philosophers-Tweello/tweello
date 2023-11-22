@@ -17,45 +17,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { requestOptions } from "@/hooks/requestOptions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Textarea } from "./ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string(),
 });
 
-export default function EditBoardDialog({
-  boardName,
-  boardDescription,
+export default function CreateTaskDialog({
   params,
+  columnId,
 }: {
-  boardName: string;
-  boardDescription: string;
   params: { workspaceId: string; boardId: string };
+  columnId: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [boardInfo, setBoardInfo] = useState({
-    name: boardName,
-    description: boardDescription,
-  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: boardInfo.name,
-      description: boardInfo.description,
+      name: "",
+      description: "",
     },
   });
 
-  const handleEdit = (values: z.infer<typeof formSchema>) => {
+  const handleCreate = (values: z.infer<typeof formSchema>) => {
     fetch(
-      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}`,
-      requestOptions("PUT", values),
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns/${columnId}/tasks`,
+      requestOptions("POST", values),
     )
       .then((response) => {
         if (!response.ok) {
@@ -64,12 +58,9 @@ export default function EditBoardDialog({
         setOpen(false);
       })
       .catch((error) => {
-        console.error("Error fetching board:", error);
+        console.error("Error creating board:", error);
       });
-    setBoardInfo({
-      name: values.name,
-      description: values.description,
-    });
+    form.reset();
   };
 
   return (
@@ -77,21 +68,27 @@ export default function EditBoardDialog({
       open={open}
       onOpenChange={() => {
         setOpen(!open);
-        form.reset({
-          name: boardInfo.name,
-          description: boardInfo.description,
-        });
+        form.reset();
       }}
     >
-      <DialogTrigger asChild>
-        <Button>Edit Board</Button>
+      <DialogTrigger>
+        <Button
+          size="lg"
+          variant="ghost"
+          className="hover:bg-primary-foreground w-full"
+        >
+          Create New Task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Board</DialogTitle>
+          <DialogTitle>Create New Task</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleEdit)} className="space-y-8">
+          <form
+            onSubmit={form.handleSubmit(handleCreate)}
+            className="space-y-8"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -99,7 +96,7 @@ export default function EditBoardDialog({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter the board name" {...field} />
+                    <Input placeholder="Enter the task name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,7 +110,7 @@ export default function EditBoardDialog({
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter the board description"
+                      placeholder="Enter the task description"
                       {...field}
                     />
                   </FormControl>
@@ -127,7 +124,7 @@ export default function EditBoardDialog({
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={!form.formState.isValid}>Update</Button>
+              <Button disabled={!form.formState.isValid}>Create</Button>
             </DialogFooter>
           </form>
         </Form>

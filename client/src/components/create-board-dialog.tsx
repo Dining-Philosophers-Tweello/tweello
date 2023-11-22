@@ -116,7 +116,7 @@ export default function CreateBoardDialog({
                   Cancel
                 </Button>
               </DialogClose>
-              <Button>Create</Button>
+              <Button disabled={!form.formState.isValid}>Create</Button>
             </DialogFooter>
           </form>
         </Form>

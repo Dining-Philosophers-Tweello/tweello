@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { requestOptions } from "@/hooks/requestOptions";
-import { Plus } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
 export default function CreateColumnDialog({
@@ -53,8 +52,7 @@ export default function CreateColumnDialog({
     >
       <DialogTrigger>
         <Button className="w-80 min-w-[20rem] hover:bg-blend-lighten">
-          Add Column
-          <Plus />
+          Create New Column
         </Button>
       </DialogTrigger>
       <DialogContent>
