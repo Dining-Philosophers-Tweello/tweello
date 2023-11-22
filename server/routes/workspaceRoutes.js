@@ -19,6 +19,7 @@ import {
   editTask,
   getTask,
   getTasks,
+  moveTask,
 } from "../controllers/taskController.js";
 import {
   createWorkspace,
@@ -68,6 +69,7 @@ router
 router
   .route("/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId")
   .put(protect, editTask)
+  .patch(protect, moveTask)
   .delete(protect, deleteTask)
   .get(protect, getTask);
 
