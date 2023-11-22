@@ -67,7 +67,71 @@ const createTask = asyncHandler(async (request, response) => {
 // @route   PUT /api/workspaces/:workspaceId/boards/:boardId/tasks/:taskId
 // @access  Private
 const editTask = asyncHandler(async (request, response) => {
-  // To-do
+  const { name, description } = request.body;
+  const currentUserId = request.user._id;
+  const workspaceId = request.params.workspaceId;
+  const boardId = request.params.boardId;
+  const columnId = request.params.columnId;
+  const taskId = request.params.taskId;
+
+  // Check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
+  // Find the board
+  const board = workspace.boards.id(boardId);
+
+  // Check if the board exists
+  if (!board) {
+    response.status(404);
+    throw new Error("Board not found");
+  }
+
+  // Find the column
+  const column = board.columns.id(columnId);
+
+  // Check if the column exists
+  if (!column) {
+    response.status(404);
+    throw new Error("Column not found");
+  }
+
+  const taskToEdit = column.tasks.id(taskId);
+
+  if (!taskToEdit) {
+    response.status(404);
+    throw new Error("Task not found");
+  }
+
+  taskToEdit.name = name || taskToEdit.name;
+  taskToEdit.description = description || taskToEdit.description;
+
+  await workspace.save();
+
+  response.status(200).json({
+    _id: taskToEdit._id,
+    name: taskToEdit.name,
+    description: taskToEdit.descriptionn,
+  });
 });
 
 // @desc    Delete a task
