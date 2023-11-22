@@ -177,7 +177,7 @@ const deleteTask = asyncHandler(async (request, response) => {
     throw new Error("Board not found");
   }
 
-  // Find the column 
+  // Find the column
   const columnToDelete = board.columns.id(columnId);
 
   // Check if the column exists
@@ -186,7 +186,7 @@ const deleteTask = asyncHandler(async (request, response) => {
     throw new Error("Column not found");
   }
 
-  // Find the task 
+  // Find the task
   const taskToDelete = board.columns.id(columnId);
 
   // Check if the task exists
@@ -199,7 +199,7 @@ const deleteTask = asyncHandler(async (request, response) => {
   await Workspace.updateOne(
     { _id: workspaceId, "boards._id": boardId },
     { $pull: { "boards.$.columns.$[col].tasks": { _id: taskId } } },
-    { arrayFilters: [{ "col._id": columnId }] }
+    { arrayFilters: [{ "col._id": columnId }] },
   );
 
   // Save the updated board without the deleted task
