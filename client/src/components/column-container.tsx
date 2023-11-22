@@ -17,22 +17,13 @@ interface Props {
   params: { workspaceId: string; boardId: string };
   column: Column;
   updateColumn: (id: string, name: string) => void;
-  createTask: (columnId: string) => void;
   updateTask: (id: string, content: string) => void;
   deleteTask: (id: string) => void;
   tasks: Task[];
 }
 
 function ColumnContainer(props: Props) {
-  const {
-    params,
-    column,
-    updateColumn,
-    createTask,
-    tasks,
-    deleteTask,
-    updateTask,
-  } = props;
+  const { params, column, updateColumn, tasks, deleteTask, updateTask } = props;
 
   const [editMode, setEditMode] = useState(false);
 

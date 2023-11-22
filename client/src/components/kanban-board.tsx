@@ -72,7 +72,6 @@ export default function KanbanBoard({
                 key={column._id}
                 column={column}
                 updateColumn={updateColumn}
-                createTask={createNewTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
                 tasks={tasks.filter((task) => task.columnId === column._id)}
@@ -88,7 +87,6 @@ export default function KanbanBoard({
                 params={params}
                 column={activeColumn}
                 updateColumn={updateColumn}
-                createTask={createNewTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
                 tasks={tasks.filter(
@@ -115,14 +113,6 @@ export default function KanbanBoard({
       return { ...column, name };
     });
     setColumns(newColumns);
-  }
-  function createNewTask(columnId: string) {
-    const newTask: Task = {
-      _id: generateId(),
-      columnId,
-      content: `Task ${tasks.length + 1}`,
-    };
-    setTasks([...tasks, newTask]);
   }
   function updateTask(id: string, content: string) {
     const newTasks = tasks.map((task) => {
@@ -203,9 +193,4 @@ export default function KanbanBoard({
       });
     }
   }
-}
-
-function generateId() {
-  // Generate a random number between 1 and 10_000
-  return (Math.floor(Math.random() * 10_000) + 1).toString();
 }
