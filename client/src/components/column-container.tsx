@@ -1,40 +1,29 @@
 import DeleteDialog from "@/components/delete-dialog";
 import TaskCard from "@/components/task-card";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
 } from "@/components/ui/card";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Column, Task } from "@/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import CreateTaskDialog from "./create-task-dialog";
 import EditColumnDialog from "./edit-column-dialog";
 
 interface Props {
   params: { workspaceId: string; boardId: string };
   column: Column;
   updateColumn: (id: string, name: string) => void;
-  createTask: (columnId: string) => void;
   updateTask: (id: string, content: string) => void;
   deleteTask: (id: string) => void;
   tasks: Task[];
 }
 
 function ColumnContainer(props: Props) {
-  const {
-    params,
-    column,
-    updateColumn,
-    createTask,
-    tasks,
-    deleteTask,
-    updateTask,
-  } = props;
+  const { params, column, updateColumn, tasks, deleteTask, updateTask } = props;
 
   const [editMode, setEditMode] = useState(false);
 
@@ -124,18 +113,7 @@ function ColumnContainer(props: Props) {
           ))}
         </SortableContext>
       </CardContent>
-      {/*Footer*/}
-      <CardFooter>
-        <Button
-          size="lg"
-          variant="ghost"
-          className="hover:bg-primary-foreground w-full"
-          onClick={() => createTask(column._id)}
-        >
-          <PlusIcon />
-          Add Task
-        </Button>
-      </CardFooter>
+      <CreateTaskDialog params={params} columnId={column._id} />
     </Card>
   );
 }

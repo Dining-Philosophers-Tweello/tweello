@@ -102,7 +102,7 @@ export default function EditColumnDialog({
                   Cancel
                 </Button>
               </DialogClose>
-              <Button>Update</Button>
+              <Button disabled={!form.formState.isValid}>Update</Button>
             </DialogFooter>
           </form>
         </Form>
