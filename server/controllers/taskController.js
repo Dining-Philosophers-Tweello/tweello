@@ -64,7 +64,7 @@ const createTask = asyncHandler(async (request, response) => {
 });
 
 // @desc    Edit a task
-// @route   PUT /api/workspaces/:workspaceId/boards/:boardId/tasks/:taskId
+// @route   PUT /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId
 // @access  Private
 const editTask = asyncHandler(async (request, response) => {
   const { name, description } = request.body;
