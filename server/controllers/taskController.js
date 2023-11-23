@@ -138,7 +138,71 @@ const editTask = asyncHandler(async (request, response) => {
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId
 // @access  Private
 const deleteTask = asyncHandler(async (request, response) => {
-  // To-do
+  const workspaceId = request.params.workspaceId;
+  const boardId = request.params.boardId;
+  const columnId = request.params.columnId;
+  const taskId = request.params.taskId;
+  const currentUserId = request.user._id;
+
+  // Check if the workspace exists
+  let workspace;
+  try {
+    workspace = await Workspace.findById(workspaceId);
+  } catch (error) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+  // Check against old deleted workspace IDs
+  if (!workspace) {
+    response.status(404);
+    throw new Error("Workspace not found");
+  }
+
+  // Check if the user has access to the workspace
+  if (
+    workspace.creator.toString() !== currentUserId.toString() &&
+    !workspace.members.includes(currentUserId)
+  ) {
+    response.status(403);
+    throw new Error("Unauthorized access to this workspace");
+  }
+
+  // Find the board
+  const board = workspace.boards.id(boardId);
+
+  // Check if the board exists
+  if (!board) {
+    response.status(404);
+    throw new Error("Board not found");
+  }
+
+  // Find the column
+  const column = board.columns.id(columnId);
+
+  // Check if the column exists
+  if (!column) {
+    response.status(404);
+    throw new Error("Column not found");
+  }
+
+  // Find the task
+  const taskToDelete = column.tasks.id(taskId);
+
+  // Check if the task exists
+  if (!taskToDelete) {
+    response.status(404);
+    throw new Error("Task not found");
+  }
+
+  // Delete the task using the _id of the task within a specific column
+  await Workspace.updateOne(
+    { _id: workspaceId, "boards._id": boardId },
+    { $pull: { "boards.$.columns.$[col].tasks": { _id: taskId } } },
+    { arrayFilters: [{ "col._id": columnId }] },
+  );
+
+  // Save the updated board without the deleted task
+  response.status(200).json({ message: "Task deleted successfully" });
 });
 
 // @desc    Get a column's task
