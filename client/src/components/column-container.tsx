@@ -100,12 +100,13 @@ function ColumnContainer(props: Props) {
           </div>
         </CardHeader>
       </div>
-      {/*Content*/}
       <CardContent className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
               key={task._id}
+              params={params}
+              columnId={column._id}
               task={task}
               deleteTask={deleteTask}
               updateTask={updateTask}

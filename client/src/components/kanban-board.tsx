@@ -35,7 +35,13 @@ export default function KanbanBoard({
       },
     }),
   );
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      _id: "655e779487311043184da7a3",
+      columnId: "655bf908bc271d6ee3f94bc1",
+      content: "hi",
+    },
+  ]);
 
   useEffect(() => {
     fetch(
@@ -96,6 +102,8 @@ export default function KanbanBoard({
             )}
             {activeTask && (
               <TaskCard
+                params={params}
+                columnId={activeColumn._id}
                 task={activeTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}

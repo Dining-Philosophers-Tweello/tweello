@@ -1,18 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { requestOptions } from "@/hooks/requestOptions";
 import { Task } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import DeleteDialog from "./delete-dialog";
 
 interface Props {
+  params: { workspaceId: string; boardId: string };
+  columnId: string;
   task: Task;
   deleteTask: (id: string) => void;
   updateTask: (id: string, content: string) => void;
 }
 
-function TaskCard({ task, deleteTask, updateTask }: Props) {
+function TaskCard({ params, columnId, task, deleteTask, updateTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const {
@@ -36,6 +40,23 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
   const toggleEditMode = () => {
     setEditMode(!editMode);
     setMouseIsOver(false);
+  };
+
+  const handleDelete = () => {
+    fetch(
+      `http://localhost:8000/api/workspaces/${params.workspaceId}/boards/${params.boardId}/columns/${columnId}/tasks/${task._id}`,
+      requestOptions("DELETE"),
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .catch((error) => {
+        console.error("Error deleting column:", error);
+      });
   };
 
   if (isDragging) {
@@ -98,6 +119,16 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       >
         <CardTitle className="justify-center flex items-center align-middle">
           {task.content}
+          <div>
+            <DeleteDialog
+              componentName={"Task"}
+              handleDelete={handleDelete}
+              variant="ghost"
+              size="icon"
+              className="!mt-0"
+              color="grey"
+            ></DeleteDialog>
+          </div>
         </CardTitle>
         {mouseIsOver && (
           <Button
