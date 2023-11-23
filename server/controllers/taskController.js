@@ -138,7 +138,6 @@ const editTask = asyncHandler(async (request, response) => {
 // @route   DELETE /api/workspaces/:workspaceId/boards/:boardId/columns/:columnId/tasks/:taskId
 // @access  Private
 const deleteTask = asyncHandler(async (request, response) => {
-  const name = request.body;
   const workspaceId = request.params.workspaceId;
   const boardId = request.params.boardId;
   const columnId = request.params.columnId;
@@ -178,21 +177,21 @@ const deleteTask = asyncHandler(async (request, response) => {
   }
 
   // Find the column
-  const columnToDelete = board.columns.id(columnId);
+  const column = board.columns.id(columnId);
 
   // Check if the column exists
-  if (!columnToDelete) {
+  if (!column) {
     response.status(404);
     throw new Error("Column not found");
   }
 
   // Find the task
-  const taskToDelete = board.columns.id(columnId);
+  const taskToDelete = column.tasks.id(taskId);
 
   // Check if the task exists
   if (!taskToDelete) {
     response.status(404);
-    throw new Error("Column not found");
+    throw new Error("Task not found");
   }
 
   // Delete the task using the _id of the task within a specific column
