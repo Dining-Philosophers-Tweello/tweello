@@ -28,7 +28,10 @@ export interface Column {
 export interface Task {
   _id: string;
   columnId: string;
-  content: string;
+  name: string;
+  description: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export const nullWorkspace = {
@@ -59,4 +62,10 @@ export const nullColumn = {
   createdAt: "",
 };
 
-export const nullTask = {};
+export const nullTask = {
+  _id: "-1",
+  name: "",
+  description: "",
+  updatedAt: "",
+  createdAt: "",
+};

@@ -9,7 +9,7 @@ export const requestOptions = (method: string, payload?: string | Object) => {
       method: method,
       headers: headers,
     };
-  } else if (method === "POST" || method === "PUT") {
+  } else if (method === "POST" || method === "PUT" || method === "PATCH") {
     return {
       method: method,
       headers: headers,

@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema(
   {
+    columnId: {
+      type: String,
+    },
     name: {
       type: String,
       required: true,
