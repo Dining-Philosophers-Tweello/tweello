@@ -52,12 +52,17 @@ const createTask = asyncHandler(async (request, response) => {
     throw new Error("Column not found");
   }
 
-  column.tasks.push({ name: name, description: description });
+  column.tasks.push({
+    columnId: columnId,
+    name: name,
+    description: description,
+  });
   // Must save the parent doc, not the subdoc!
   const updatedWorkspace = await workspace.save();
 
   response.status(201).json({
     _id: column.tasks[column.tasks.length - 1].id,
+    columnId: column.tasks[column.tasks.length - 1].columnId,
     name: column.tasks[column.tasks.length - 1].name,
     description: column.tasks[column.tasks.length - 1].description,
   });
@@ -267,6 +272,7 @@ const getTask = asyncHandler(async (request, response) => {
 
   response.status(200).json({
     _id: task._id,
+    columnId: task.columnId,
     name: task.name,
     description: task.description,
   });
@@ -394,7 +400,7 @@ const moveTask = asyncHandler(async (request, response) => {
   // Check if the new column exists
   if (!newColumn) {
     response.status(404);
-    throw new Error("Column not found");
+    throw new Error("New column not found");
   }
 
   // Remove the task from the original column
@@ -403,6 +409,7 @@ const moveTask = asyncHandler(async (request, response) => {
   // Add the task to the new column
   newColumn.tasks.push({
     _id: taskToMove._id,
+    columnId: newColumnId,
     name: taskToMove.name,
     description: taskToMove.description,
   });
