@@ -1,7 +1,7 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Task } from "@/types";
-import { useSortable } from "@dnd-kit/sortable";
+import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import DeleteDialog from "./delete-dialog";
 import EditTaskDialog from "./edit-task-dialog";
@@ -13,14 +13,19 @@ interface Props {
 }
 
 function TaskCard({ params, columnId, task }: Props) {
-  const { setNodeRef, attributes, listeners, transform, isDragging } =
-    useSortable({
-      id: task._id,
-      data: {
-        type: "Task",
-        task,
-      },
-    });
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: task._id,
+    data: {
+      type: "Task",
+      task,
+    },
+  });
   const style = {
     transform: CSS.Transform.toString(transform),
   };
@@ -47,7 +52,7 @@ function TaskCard({ params, columnId, task }: Props) {
       <Card
         ref={setNodeRef}
         style={style}
-        className="bg-card border-2 border-primary opacity-30 flex items-center flex-row justify-start min-h-[8rem]
+        className="  bg-card border-2 border-primary opacity-30 flex items-center flex-row justify-start min-h-[8rem]
          w-full whitespace-pre-wrap max-h-32"
       >
         <CardTitle className="flex justify-start p-6">{task.name}</CardTitle>
