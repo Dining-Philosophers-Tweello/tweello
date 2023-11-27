@@ -37,6 +37,10 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-5 p-5 w-screen h-screen">
       <div className="flex gap-5 flex-wrap">
+        <div className="flex flex-row gap-3">
+          <div className="text-4xl font-bold">Your Workspaces</div>
+          <CreateWorkspaceDialog />
+        </div>
         {workspaces.length === 0 ? (
           <div className="flex items-center justify-center w-screen h-[calc(100vh-200px)]">
             <div className="text-2xl text-gray-400">
@@ -45,10 +49,6 @@ export default function Home() {
           </div>
         ) : (
           <>
-            <div className="flex flex-row gap-3">
-              <div className="text-4xl font-bold">Your Workspaces</div>
-              <CreateWorkspaceDialog />
-            </div>
             <div className="flex flex-row w-screen h-fit flex-wrap gap-5">
               {workspaces.map((workspace) => (
                 <WorkspaceBoardCard
