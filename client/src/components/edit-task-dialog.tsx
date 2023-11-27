@@ -35,10 +35,12 @@ export default function EditTaskDialog({
   params,
   columnId,
   task,
+  onOpenCloseDialog,
 }: {
   params: { workspaceId: string; boardId: string };
   columnId: string;
   task: Task;
+  onOpenCloseDialog: () => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -70,6 +72,7 @@ export default function EditTaskDialog({
     <Dialog
       open={open}
       onOpenChange={() => {
+        onOpenCloseDialog();
         setOpen(!open);
         form.reset({
           name: task.name,
