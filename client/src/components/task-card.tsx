@@ -3,6 +3,7 @@ import { requestOptions } from "@/hooks/requestOptions";
 import { Task } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 import DeleteDialog from "./delete-dialog";
 import EditTaskDialog from "./edit-task-dialog";
 
@@ -13,6 +14,7 @@ interface Props {
 }
 
 function TaskCard({ params, columnId, task }: Props) {
+  const [showDialog, setShowDialog] = useState(false);
   const {
     setNodeRef,
     attributes,
@@ -20,13 +22,22 @@ function TaskCard({ params, columnId, task }: Props) {
     transform,
     transition,
     isDragging,
-  } = useSortable({
-    id: task._id,
-    data: {
-      type: "Task",
-      task,
-    },
-  });
+  } = showDialog
+    ? useSortable({
+        id: task._id,
+        data: {
+          type: "Task",
+          task,
+        },
+        disabled: true,
+      })
+    : useSortable({
+        id: task._id,
+        data: {
+          type: "Task",
+          task,
+        },
+      });
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -64,7 +75,12 @@ function TaskCard({ params, columnId, task }: Props) {
                 : task.name.slice(0, 15) + "..."}
             </CardTitle>
             <div>
-              <EditTaskDialog params={params} columnId={columnId} task={task} />
+              <EditTaskDialog
+                params={params}
+                columnId={columnId}
+                task={task}
+                onOpenCloseDialog={() => setShowDialog(!showDialog)}
+              />
               <DeleteDialog
                 componentName={"Task"}
                 handleDelete={handleDelete}
@@ -101,7 +117,12 @@ function TaskCard({ params, columnId, task }: Props) {
               : task.name.slice(0, 15) + "..."}
           </CardTitle>
           <div>
-            <EditTaskDialog params={params} columnId={columnId} task={task} />
+            <EditTaskDialog
+              params={params}
+              columnId={columnId}
+              task={task}
+              onOpenCloseDialog={() => setShowDialog(!showDialog)}
+            />
             <DeleteDialog
               componentName={"Task"}
               handleDelete={handleDelete}
@@ -109,6 +130,7 @@ function TaskCard({ params, columnId, task }: Props) {
               size="icon"
               className="!mt-0"
               color="grey"
+              onOpenCloseDialog={() => setShowDialog(!showDialog)}
             />
           </div>
         </CardHeader>

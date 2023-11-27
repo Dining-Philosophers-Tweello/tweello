@@ -14,6 +14,7 @@ import { Trash2 } from "lucide-react";
 interface DeleteDialogProps extends ButtonProps {
   componentName: string;
   handleDelete: () => void;
+  onOpenCloseDialog?: () => void;
 }
 const DeleteDialog = ({
   componentName,
@@ -22,9 +23,10 @@ const DeleteDialog = ({
   className,
   size = "icon",
   color,
+  onOpenCloseDialog = () => {},
 }: DeleteDialogProps) => {
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenCloseDialog}>
       <DialogTrigger>
         <Button variant={variant} className={className} size={size}>
           <Trash2 color={color} size={24} />
