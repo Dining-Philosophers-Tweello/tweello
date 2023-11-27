@@ -58,7 +58,11 @@ function TaskCard({ params, columnId, task }: Props) {
       >
         <div className="flex flex-col">
           <CardHeader className="pl-4 pr-1 flex items-center flex-row justify-between h-[90%] w-full whitespace-pre-wrap">
-            <CardTitle>{task.name}</CardTitle>
+            <CardTitle>
+              {task.name.length <= 15
+                ? task.name
+                : task.name.slice(0, 15) + "..."}
+            </CardTitle>
             <div>
               <EditTaskDialog params={params} columnId={columnId} task={task} />
               <DeleteDialog
@@ -91,7 +95,11 @@ function TaskCard({ params, columnId, task }: Props) {
     >
       <div className="flex flex-col">
         <CardHeader className="pl-4 pr-1 flex items-center flex-row justify-between h-[90%] w-full whitespace-pre-wrap">
-          <CardTitle>{task.name}</CardTitle>
+          <CardTitle>
+            {task.name.length <= 15
+              ? task.name
+              : task.name.slice(0, 15) + "..."}
+          </CardTitle>
           <div>
             <EditTaskDialog params={params} columnId={columnId} task={task} />
             <DeleteDialog
