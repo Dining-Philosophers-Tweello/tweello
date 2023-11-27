@@ -1,11 +1,6 @@
 import DeleteDialog from "@/components/delete-dialog";
 import TaskCard from "@/components/task-card";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requestOptions } from "@/hooks/requestOptions";
 import { Column } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
@@ -51,11 +46,11 @@ function ColumnContainer(props: Props) {
     >
       <div className="flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between bg-card rounded rounded-b-none p-3 border-2 border-secondary">
-          <CardDescription>
-            <span className="text-muted-foreground text-base px-2 py-1 items-center justify-center">
+          <CardTitle>
+            <span className="text-base px-2 py-1 items-center justify-center">
               {column.name}
             </span>
-          </CardDescription>
+          </CardTitle>
           <div>
             <EditColumnDialog params={props.params} columnData={column} />
             <DeleteDialog
